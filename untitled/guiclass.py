@@ -1,8 +1,13 @@
 from tkinter import Frame, Listbox, Menu, LEFT, RIGHT, BOTH, END
 from tkinter import filedialog
 import os
+import PyLyrics
+import urllib.request
 import re
+import xml.etree.ElementTree as ET
+
 from mutagen.id3 import ID3
+
 
 class Example(Frame):
     def __init__(self, parent):
@@ -11,6 +16,7 @@ class Example(Frame):
         self.listbox = Listbox(parent)
         self.parent = parent
         self.initui()
+        self.list = {}
 
     def initui(self):
 
@@ -55,6 +61,24 @@ class Example(Frame):
         try:
             audio = ID3(pathtofile)
             self.listbox.insert(END, audio['TPE1'].text[0] + " - " + audio["TIT2"].text[0]) # ID3 - black magic of the unicorn
+            try:
+                self.list[ audio['TPE1'].text[0]].append(audio["TIT2"].text[0])
+            except KeyError:
+                self.list[ audio['TPE1'].text[0]] = [audio["TIT2"].text[0]]
         except:
             pass
 
+    def downloadFile(self):
+        urllib.request.urlretrieve("http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000", "scrobble.xml")
+
+    def parseFile(self):
+        tree = ET.parse('scrobble.xml')
+        root = tree.getroot()
+        for x in root.findall('.//name'):
+            self.listbox1.insert(END,x.text)
+        #match = re.match(r'<name>(.*)<//name>',xmlstr);
+        #for x in match.groups().count():
+        #    self.listbox1.insert(END, match.group(x))
+
+    def getLyrics(self):
+        pass
