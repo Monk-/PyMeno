@@ -1,10 +1,14 @@
 from tkinter import Frame, Listbox, Menu, LEFT, RIGHT, BOTH, END
 from tkinter import filedialog
 import os
-import PyLyrics
+from PyLyrics import *
 import urllib.request
-import re
+import collections, re
+import stop_words
 import xml.etree.ElementTree as ET
+from sklearn.feature_extraction.text import CountVectorizer
+from nltk.corpus import stopwords
+from nltk.stem.snowball import SnowballStemmer
 
 from mutagen.id3 import ID3
 
@@ -17,6 +21,8 @@ class Example(Frame):
         self.parent = parent
         self.initui()
         self.list = {}
+        self.list1 = collections.Counter()
+        self.list2 = []
 
     def initui(self):
 
@@ -56,17 +62,24 @@ class Example(Frame):
         for dirpath, dirnames, filenames in os.walk(dirname):
             for filename in filenames:
                 self.changeTitle(os.path.join(dirpath, filename))
+            self.sklearnBagOfWords()
+               #print(self.list1)
 
     def changeTitle(self, pathtofile):
         try:
             audio = ID3(pathtofile)
             self.listbox.insert(END, audio['TPE1'].text[0] + " - " + audio["TIT2"].text[0]) # ID3 - black magic of the unicorn
             try:
-                self.list[ audio['TPE1'].text[0]].append(audio["TIT2"].text[0])
+                self.list[audio['TPE1'].text[0]].append(audio["TIT2"].text[0])
+                self.addSongToList(audio['TPE1'].text[0],audio["TIT2"].text[0])
             except KeyError:
-                self.list[ audio['TPE1'].text[0]] = [audio["TIT2"].text[0]]
+                self.list[audio['TPE1'].text[0]] = [audio["TIT2"].text[0]]
+                self.addSongToList(audio['TPE1'].text[0],audio["TIT2"].text[0])
+            #self.getBagOfWords(audio['TPE1'].text[0],audio["TIT2"].text[0])
         except:
             pass
+
+
 
     def downloadFile(self):
         urllib.request.urlretrieve("http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000", "scrobble.xml")
@@ -76,9 +89,35 @@ class Example(Frame):
         root = tree.getroot()
         for x in root.findall('.//name'):
             self.listbox1.insert(END,x.text)
-        #match = re.match(r'<name>(.*)<//name>',xmlstr);
-        #for x in match.groups().count():
-        #    self.listbox1.insert(END, match.group(x))
 
-    def getLyrics(self):
-        pass
+    def tokeni(self,data):
+        return [SnowballStemmer("english").stem(word) for word in data.split()]
+
+    def preprocessor(self, data):
+        return " ".join([SnowballStemmer("english").stem(word) for word in data.split()])
+
+    def getBagOfWords(self, artistName, songName):
+        song = PyLyrics.getLyrics(artistName, songName).lower().split()
+        song = [word for word in song if word not in stop_words.get_stop_words('english')]
+        song = [re.sub(r'[^A-Za-z0-9]+', '', x) for x in song]
+        p = collections.Counter(song)
+        self.list1 = self.list1 + p
+
+    def addSongToList(self, artistName, songName):
+        self.list2.append(PyLyrics.getLyrics(artistName, songName).lower())
+
+
+
+    def sklearnBagOfWords(self):
+        vectorizer = CountVectorizer(stop_words=stopwords.words('english'))
+        bagOfWords = vectorizer.fit(self.list2)
+        print(bagOfWords.vocabulary_)
+        bagOfWords = vectorizer.transform(self.list2)
+
+        print(bagOfWords)
+        print(vectorizer.vocabulary_)
+        #print(vectorizer.vocabulary_.get("come"))
+        #print(vectorizer.get_feature_names())
+        #print(bagOfWords)
+
+

@@ -1,16 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from guiclass import Example
 from tkinter import *
+
 from PyLyrics import *
+import nltk
+from guiclass import Example
+
 
 def createGui():
     root = Tk()
     root.geometry("800x400+300+300")
     app = Example(root)
-    app.downloadFile()
-    app.parseFile()
+    #app.downloadFile()
+   # app.parseFile()
 
     root.mainloop()
 
