@@ -38,3 +38,5 @@ def parseFile(number_of):
             print("GIGA ERROR")
     with open("pickle" + str(number_of) + ".p", 'wb') as f:
         pickle.dump(dicto, f)
+        data2 = pickle.load(open("pickle" + str(number_of) + ".p", 'rb'))
+        print(data2)

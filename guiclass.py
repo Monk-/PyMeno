@@ -4,7 +4,6 @@ import os
 from PyLyrics import *
 import urllib.request
 import collections, re
-import stop_words
 import xml.etree.ElementTree as ET
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
