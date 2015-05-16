@@ -22,6 +22,7 @@ class GUI(Frame):
         self.parent.config(menu=menu_bar)
         file_menu = Menu(menu_bar, tearoff=False)
         menu2_parse = Menu(menu_bar, tearoff=False)
+        menu3_parse = Menu(menu_bar, tearoff=False)
         sub_menu = Menu(file_menu, tearoff=False)
         self.left_list.pack(side=LEFT, fill=BOTH, expand=2)
         self.right_list.pack(side=RIGHT, fill=BOTH, expand=2)
@@ -39,14 +40,40 @@ class GUI(Frame):
         menu2_parse.add_command(label="Download artists list", underline=0, command=datMan.download_list_of_artists)
         menu2_parse.add_command(label="Parse artists information to database", underline=0, command=self.show_entry)
 
+        menu3_parse.\
+            add_command(label="Parse artists information to database", underline=0, command=self.go_to_lilis_parsing)
+        menu3_parse.add_command(label="Show", underline=0, command=self.show_stats)
+        menu3_parse.add_command(label="Show by album", underline=0, command=self.show_stats_by_album)
+
         menu_bar.add_cascade(label="File", underline=0, menu=file_menu)
         menu_bar.add_cascade(label="Data", underline=0, menu=menu2_parse)
+        menu_bar.add_cascade(label="Lily options", underline=0, menu=menu3_parse)
 
     def show_entry(self):
         try:
             number = int(simpledialog.askstring('Number', 'How many artists?'))
             print(number)
             datMan.parseFile(number)
+        except:
+            pass
+
+    def show_stats(self):
+        try:
+            datMan.get_music_stats()
+        except:
+            pass
+
+    def show_stats_by_album(self):
+        try:
+            datMan.get_music_stats_by_album()
+        except:
+            pass
+
+    def go_to_lilis_parsing(self):
+        try:
+            number = int(simpledialog.askstring('Number', 'How many artists?'))
+            print(number)
+            datMan.parse_file_lil_version(number)
         except:
             pass
 

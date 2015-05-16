@@ -6,6 +6,7 @@ from PyLyrics import *
 
 bag = Counter()
 
+
 def changeTitle(self, path_to_file):
     try:
         audio = ID3(path_to_file)
@@ -26,6 +27,7 @@ def bag_of_words(artist_name, song_name):
     song = [re.sub(r'[^A-Za-z0-9]+', '', x) for x in song]
     cnt = Counter(song)
     bag.update(Counter({k:v for k, v in cnt.items() if v > 10}))
+
 
 def extend_stop_words_list():
     pass
