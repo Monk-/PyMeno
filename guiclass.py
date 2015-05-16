@@ -9,6 +9,8 @@ import xml.etree.ElementTree as ET
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
+from sklearn.neighbors import NearestNeighbors
+import pickle
 
 from mutagen.id3 import ID3
 
@@ -71,30 +73,54 @@ class Example(Frame):
             self.listbox.insert(END, audio['TPE1'].text[0] + " - " + audio["TIT2"].text[0]) # ID3 - black magic of the unicorn
             try:
                 self.list[audio['TPE1'].text[0]].append(audio["TIT2"].text[0])
-                self.addSongToList(audio['TPE1'].text[0],audio["TIT2"].text[0])
+                #self.addSongToList(audio['TPE1'].text[0],audio["TIT2"].text[0])
             except KeyError:
                 self.list[audio['TPE1'].text[0]] = [audio["TIT2"].text[0]]
-                self.addSongToList(audio['TPE1'].text[0],audio["TIT2"].text[0])
-            #self.getBagOfWords(audio['TPE1'].text[0],audio["TIT2"].text[0])
+                #self.addSongToList(audio['TPE1'].text[0],audio["TIT2"].text[0])
+            self.getBagOfWords(audio['TPE1'].text[0],audio["TIT2"].text[0])
         except:
             pass
 
 
 
-    def downloadFile(self):
+    def download_list_of_artists(self):
         urllib.request.urlretrieve("http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000", "scrobble.xml")
 
     def parseFile(self):
         tree = ET.parse('scrobble.xml')
         root = tree.getroot()
+        list3 = []
+        counter = 0
         for x in root.findall('.//name'):
-            self.listbox1.insert(END,x.text)
+            counter +=1
+            print(x.text, counter)
+            try:
+                 for g in PyLyrics.getAlbums(x.text):
+                    try:
+                         for track in PyLyrics.getTracks(g):
+                            try:
+                                list3.append(PyLyrics.getLyrics(track.artist, track.name).lower())
+                                print(track.artist, track.name)
+                            except ValueError:
+                                print(track.artist, track.name, " ERROR ")
+                                pass
+                    except:
+                        print("MEGA ERROR")
+                        pass
+            except:
+                print("GIGA ERROR")
+        #vectorizer = CountVectorizer(stop_words=stopwords.words('english'))
+        #bagOfWords = vectorizer.fit(list3)
+        #bagOfWords = vectorizer.transform(list3)
+        with open("pickle200.p", 'wb') as f:
+            pickle.dump(list3, f)
+           # self.listbox1.insert(END,x.text)
 
     def tokeni(self,data):
         return [SnowballStemmer("english").stem(word) for word in data.split()]
 
     def preprocessor(self, data):
-        return " ".join([SnowballStemmer("english").stem(word) for word in data.split()])
+        return " ".join([SnowballStemmer("english").stem(word) for word in  data.split()])
 
     def getBagOfWords(self, artistName, songName):
         song = PyLyrics.getLyrics(artistName, songName).lower().split()
@@ -111,13 +137,26 @@ class Example(Frame):
     def sklearnBagOfWords(self):
         vectorizer = CountVectorizer(stop_words=stopwords.words('english'))
         bagOfWords = vectorizer.fit(self.list2)
-        print(bagOfWords.vocabulary_)
         bagOfWords = vectorizer.transform(self.list2)
+        #with open("pickle.p", 'wb') as f:
+            #pickle.dump(bagOfWords, f)
+        #bagOfWords1 = pickle.load(open("pickle.p","rb"))
+        #print(bagOfWords1)
+        self.hhh()
 
-        print(bagOfWords)
-        print(vectorizer.vocabulary_)
-        #print(vectorizer.vocabulary_.get("come"))
-        #print(vectorizer.get_feature_names())
-        #print(bagOfWords)
-
+    def hhh(self):
+        vectorizer3 = CountVectorizer(stop_words=stopwords.words('english'))
+        bagOfWords3 = vectorizer3.fit(self.list2)
+        bagOfWords3 = vectorizer3.fit_transform(self.list2)
+        print(bagOfWords3.toarray()[0])
+        bagOfWords1 = pickle.load(open("pickle.p","rb"))
+        vectorizer = CountVectorizer(stop_words=stopwords.words('english'))
+        bagOfWords = vectorizer.fit(bagOfWords1)
+        bagOfWords = vectorizer.transform(bagOfWords1)
+        neigh = NearestNeighbors()
+        neigh.fit(bagOfWords.toarray())
+        print(bagOfWords.shape)
+        print(bagOfWords3.shape)
+        print(neigh.kneighbors(bagOfWords3.toarray()))
+        print(neigh.n_neighbors)
 
