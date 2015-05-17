@@ -5,7 +5,9 @@ import os
 import findMusicAlgorithm1 as algo
 import databaseManagement as datMan
 
+
 class GUI(Frame):
+    """class for GUI"""
     def __init__(self, parent):
         """init"""
         Frame.__init__(self, parent)
@@ -13,7 +15,6 @@ class GUI(Frame):
         self.left_list = Listbox(parent)
         self.parent = parent
         self.initui()
-
 
     def initui(self):
         """getting all things started"""
@@ -23,16 +24,16 @@ class GUI(Frame):
         file_menu = Menu(menu_bar, tearoff=False)
         menu2_parse = Menu(menu_bar, tearoff=False)
         menu3_parse = Menu(menu_bar, tearoff=False)
-        sub_menu = Menu(file_menu, tearoff=False)
+        # sub_menu = Menu(file_menu, tearoff=False)
         self.left_list.pack(side=LEFT, fill=BOTH, expand=2)
         self.right_list.pack(side=RIGHT, fill=BOTH, expand=2)
 
-        #add something to menu
+        # add something to menu
 
-        #submenu.add_command(label="New feed")
-        #submenu.add_command(label="Bookmarks")
-        #submenu.add_command(label="Mail")
-        #fileMenu.add_cascade(label='Import', menu=sub_menu, underline=0)
+        # submenu.add_command(label="New feed")
+        # submenu.add_command(label="Bookmarks")
+        # submenu.add_command(label="Mail")
+        # fileMenu.add_cascade(label='Import', menu=sub_menu, underline=0)
 
         file_menu.add_command(label="Choose folder with music", underline=0, command=self.openMen)
         file_menu.add_command(label="Exit", underline=0, command=self.onExit)
@@ -59,13 +60,13 @@ class GUI(Frame):
 
     def show_stats(self):
         try:
-            datMan.get_music_stats()
+            datMan.get_music_stats(self)
         except:
             pass
 
     def show_stats_by_album(self):
         try:
-            datMan.get_music_stats_by_album()
+            datMan.get_music_stats_by_album(self)
         except:
             pass
 
@@ -88,8 +89,9 @@ class GUI(Frame):
             for filename in file_names:
                 algo.changeTitle(self, os.path.join(dir_path, filename))
         self.config(cursor="")
-            #self.sklearnBagOfWords()
-               #print(self.list1)
 
     def insert_to_right_list_box(self, artist, song):
         self.right_list.insert(END, artist + " - " + song)
+
+    def insert_to_left_list_box(self, artist):
+        self.left_list.insert(END, artist)

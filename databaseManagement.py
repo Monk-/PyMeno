@@ -8,6 +8,7 @@ from mutagen.id3 import ID3
 from nltk.corpus import stopwords
 from PyLyrics import *
 from nltk.stem.wordnet import WordNetLemmatizer
+import gui as gui
 
 def download_list_of_artists():
     request.urlretrieve("http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000", "scrobble.xml")
@@ -32,9 +33,10 @@ def parseFile(number_of):
                 try:
                     for track in PyLyrics.getTracks(g):
                         try:
-                            dicto[track.artist + "," + track.name] = PyLyrics.getLyrics(track.artist, track.name).lower()
-                            #append(PyLyrics.getLyrics(track.artist, track.name).lower())
-                            #print(track.artist, track.name)
+                            dicto[track.artist + "," + track.name] = \
+                                PyLyrics.getLyrics(track.artist, track.name).lower()
+                            # append(PyLyrics.getLyrics(track.artist, track.name).lower())
+                            # print(track.artist, track.name)
                         except ValueError:
                             print(track.artist, track.name, " ERROR ")
                             pass
@@ -71,7 +73,7 @@ def parse_file_lil_version(number_of):
                                 song = PyLyrics.getLyrics(track.artist, track.name).lower().split()
                                 song = [word for word in song if word not in stopwords.words('english')]
                                 song = [re.sub(r'[^A-Za-z0-9]+', '', x) for x in song]
-                                #changing word for simple form running -> run
+                                # changing word for simple form running -> run
                                 song = [lemmatizer.lemmatize(x, 'v') for x in song]
                                 dicto[track.artist + "," + track.name] = Counter(song)
                                 try:
@@ -97,38 +99,28 @@ def parse_file_lil_version(number_of):
         pickle.dump(dicto_for_artist, l)
 
 
-def get_music_stats():
-    tree = ET.parse('scrobble.xml')
-    root = tree.getroot()
+def get_music_stats(self):
     data2 = pickle.load(open("pickleLilEvery.p", 'rb'))
-    for x in root.findall('.//name'):
+    print(len(list(data2)))
+    print_database(self, data2)
+
+
+def print_database(self, data):
+    for x in sorted(list(data), key=lambda s: s.lower()):
         try:
-            print(x.text, " : Summary words : ", len(data2[x.text]),  data2[x.text].most_common(10))
+            print(x, " : Summary words : ", len(data[x]))
+            gui.GUI.insert_to_left_list_box(self, x + " Summary words : " + str(len(data[x])))
         except:
             pass
 
 
-def get_music_stats_by_album():
-    tree = ET.parse('scrobble.xml')
-    root = tree.getroot()
+def get_music_stats_by_album(self):
     try:
         data2 = pickle.load(open("pickleLil50.p", 'rb'))
         data1 = pickle.load(open("pickleLil100.p", 'rb'))
+        data3 = pickle.load(open("pickleLil200.p", 'rb'))
+        data2.update(data3)
         data2.update(data1)
-        for x in root.findall('.//name'):
-            print("Artist: ", x.text)
-            try:
-                for g in PyLyrics.getAlbums(x.text):
-                    try:
-                        for track in PyLyrics.getTracks(g):
-                            try:
-                                print(track.name, " : Summary words : ", len(data2[track.artist + "," + track.name]),
-                                      data2[track.artist + "," + track.name].most_common(5))
-                            except:
-                                pass
-                    except:
-                        pass
-            except:
-                pass
+        print_database(self, data2)
     except:
         print("Nothing")
