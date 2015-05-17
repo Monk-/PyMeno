@@ -8,11 +8,12 @@ import pickle
 from guiclass import Example
 from gui import GUI
 
-def createGui():
+
+def create_gui():
     root = Tk()
     root.geometry("800x400+300+300")
     app = GUI(root)
     root.mainloop()
 
-createGui()
+create_gui()
 
