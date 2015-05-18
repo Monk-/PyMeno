@@ -61,6 +61,7 @@ def parse_file_lil_version(number_of):
     dictionary_per_album = {}
     dictionary_for_artist = {} # pickle.load(open("pickleLilEvery.p", 'rb'))
     list_of_song_per_album = {}
+    list_of_average = {}
     counter = 0
     songs = {}
     print(number_of)
@@ -113,12 +114,16 @@ def parse_file_lil_version(number_of):
                                 print(" ERROR ")
                                 pass
                         print("Per album " + g.name + " : ", dictionary_per_album[x.text + "," + g.name])
-                        print("Songs Per album " + str(list_of_song_per_album[x.text + "," + g.name]))
+                        list_of_average[x.text + "," + g.name] = \
+                            sum(dictionary_per_album[x.text + "," + g.name].values())\
+                            / list_of_song_per_album[x.text + "," + g.name]
+                        print("Average of word per song in specific album :: " + str(list_of_average[x.text + "," + g.name]))
                         # print("Songs Per album " + track.name + " : ", my_bag_c[track.artist + "," + track.album])
                     except:
                         print("MEGA ERROR")
-
+                print()
                 print("Artist : ", x.text, "\All : ", dictionary_for_artist[x.text])
+                print()
             except:
                 print("GIG ERROR")
         else:
@@ -127,6 +132,8 @@ def parse_file_lil_version(number_of):
         pickle.dump(dictionary_per_album, f)
     with open("pickleLilEvery" + ".p", 'wb') as l:
         pickle.dump(dictionary_for_artist, l)
+    with open("pickleLilWordPerSong" + ".p", 'wb') as d:
+        pickle.dump(list_of_average, d)
 
 
 def get_music_stats(self):
