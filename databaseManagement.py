@@ -9,6 +9,9 @@ from nltk.stem.wordnet import WordNetLemmatizer
 import gui as gui
 from tkinter import END
 
+my_bag_c = {}
+
+
 def download_list_of_artists():
     x = "http://ws.audioscrobbler.com/2.0/" \
         "?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000"
@@ -56,41 +59,66 @@ def parse_file_lil_version(number_of):
     root = tree.getroot()
     to_simpler_form = WordNetLemmatizer()
     dictionary_per_album = {}
-    dictionary_for_artist = pickle.load(open("pickleLilEvery.p", 'rb'))
+    dictionary_for_artist = {} # pickle.load(open("pickleLilEvery.p", 'rb'))
+    list_of_song_per_album = {}
     counter = 0
+    songs = {}
     print(number_of)
     for x in root.findall('.//name'):
-        if counter > 200:
+        # starting from always num - 1
+        if counter > -1:
             counter += 1
             if counter >= number_of:
                 break
             print("Artist: ", x.text, counter)
+            # going to albums
             try:
                 for g in PyLyrics.getAlbums(x.text):
+                    # going to tracks in album
+
                     try:
+                        print("ALBUM", x.text, " : ", g.name, " Parsing... ")
                         for track in PyLyrics.getTracks(g):
+                            # going to lyric in song
                             try:
-                                print(track.artist, track.name, " Parsing... ")
+                                print(track.artist, " : ", g.name, " : ", track.name, " : ")
+
+                                # operation on lyrics
                                 song = PyLyrics.getLyrics(track.artist, track.name).lower().split()
                                 song = [word for word in song if word not in stopwords.words('english')]
                                 song = [re.sub(r'[^A-Za-z0-9]+', '', x) for x in song]
+
                                 # changing word for simple form running -> run
                                 song = [to_simpler_form.lemmatize(x, 'v') for x in song]
-                                dictionary_per_album[track.artist + "," + track.name] = Counter(song)
+
+                                # Counting words per album
                                 try:
-                                    print("here")
+                                    dictionary_per_album[track.artist + "," + g.name] = \
+                                        dictionary_per_album[track.artist + "," + g.name] + Counter(song)
+                                    # counting songs per album
+                                    list_of_song_per_album[track.artist + "," + g.name] += 1
+                                except:
+                                    dictionary_per_album[track.artist + "," + g.name] = Counter(song)
+                                    list_of_song_per_album[track.artist + "," + g.name] = 1
+
+                                # print(dictionary_per_album[track.artist + "," + g.name])
+
+                                # Counting words per artist
+                                try:
                                     dictionary_for_artist[track.artist] = \
                                         Counter(dictionary_for_artist[track.artist]) + Counter(song)
                                 except:
-                                    print("not here")
                                     dictionary_for_artist[track.artist] = Counter(song)
-                                print(dictionary_per_album[track.artist + "," + track.name])
-                                print("Artists", dictionary_for_artist[track.artist])
-                            except ValueError:
-                                print(track.artist, track.name, " ERROR ")
+                            except:
+                                print(" ERROR ")
                                 pass
+                        print("Per album " + g.name + " : ", dictionary_per_album[x.text + "," + g.name])
+                        print("Songs Per album " + str(list_of_song_per_album[x.text + "," + g.name]))
+                        # print("Songs Per album " + track.name + " : ", my_bag_c[track.artist + "," + track.album])
                     except:
                         print("MEGA ERROR")
+
+                print("Artist : ", x.text, "\All : ", dictionary_for_artist[x.text])
             except:
                 print("GIG ERROR")
         else:
