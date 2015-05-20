@@ -49,11 +49,9 @@ def parse_file_by_moonko(number_of):
         except:
             print("GIG ERROR")
     with open("pickle" + str(number_of) + ".p", 'wb') as f:
-<<<<<<< HEAD
-        pickle.dump(dicto, f)
+        #pickle.dump(dicto, f)
         data2 = pickle.load(open("pickle" + str(number_of) + ".p", 'rb'))
         print(data2)
-=======
         pickle.dump(dictionary_per_album, f)
 
 
@@ -72,6 +70,7 @@ def parse_file_lil_version(number_of):
     print(number_of)
     for x in root.findall('.//name'):
         # starting from always num - 1
+        current_artist = ""
         if counter > -1:
             counter += 1
             if counter >= number_of:
@@ -87,6 +86,7 @@ def parse_file_lil_version(number_of):
                         for track in PyLyrics.getTracks(g):
                             # going to lyric in song
                             try:
+                                current_artist = track.artist
                                 print(track.artist, " : ", g.name, " : ", track.name, " : ")
 
                                 # operation on lyrics
@@ -118,16 +118,16 @@ def parse_file_lil_version(number_of):
                             except:
                                 print(" ERROR ")
                                 pass
-                        print("Per album " + g.name + " : ", dictionary_per_album[x.text + "," + g.name])
-                        list_of_average[x.text + "," + g.name] = \
-                            sum(dictionary_per_album[x.text + "," + g.name].values())\
-                            / list_of_song_per_album[x.text + "," + g.name]
-                        print("Average of word per song in specific album :: " + str(list_of_average[x.text + "," + g.name]))
+                        print("Per album " + g.name + " : ", dictionary_per_album[current_artist + "," + g.name])
+                        list_of_average[current_artist + "," + g.name] = \
+                            sum(dictionary_per_album[current_artist + "," + g.name].values())\
+                            / list_of_song_per_album[current_artist + "," + g.name]
+                        print("Average of word per song in specific album :: " + str(list_of_average[current_artist + "," + g.name]))
                         # print("Songs Per album " + track.name + " : ", my_bag_c[track.artist + "," + track.album])
                     except:
                         print("MEGA ERROR")
                 print()
-                print("Artist : ", x.text, "\All : ", dictionary_for_artist[x.text])
+                print("Artist : ", current_artist, "\All : ", dictionary_for_artist[current_artist])
                 print()
             except:
                 print("GIG ERROR")
@@ -164,4 +164,4 @@ def get_music_stats_by_album(self):
         print_database(self, data2)
     except IOError:
         print("Nothing")
->>>>>>> MyBranchYuri
+
