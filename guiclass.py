@@ -5,10 +5,8 @@ from PyLyrics import *
 import urllib.request
 import collections, re
 import xml.etree.ElementTree as ET
-from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
-from sklearn.neighbors import NearestNeighbors
 import pickle
 
 from mutagen.id3 import ID3
@@ -54,7 +52,6 @@ class Example(Frame):
         fileMenu.add_command(label="Exit", underline=0, command=self.onExit)
         menubar.add_cascade(label="File", underline=0, menu=fileMenu)
 
-
     def onExit(self):
         self.quit()
 
@@ -80,8 +77,6 @@ class Example(Frame):
         except:
             pass
 
-
-
     def download_list_of_artists(self):
         urllib.request.urlretrieve("http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000", "scrobble.xml")
 
@@ -91,7 +86,7 @@ class Example(Frame):
         list3 = []
         counter = 0
         for x in root.findall('.//name'):
-            counter +=1
+            counter += 1
             print(x.text, counter)
             try:
                  for g in PyLyrics.getAlbums(x.text):
@@ -108,12 +103,8 @@ class Example(Frame):
                         pass
             except:
                 print("GIGA ERROR")
-        #vectorizer = CountVectorizer(stop_words=stopwords.words('english'))
-        #bagOfWords = vectorizer.fit(list3)
-        #bagOfWords = vectorizer.transform(list3)
         with open("pickle200.p", 'wb') as f:
             pickle.dump(list3, f)
-           # self.listbox1.insert(END,x.text)
 
     def tokeni(self,data):
         return [SnowballStemmer("english").stem(word) for word in data.split()]
