@@ -18,43 +18,6 @@ def download_list_of_artists():
     request.urlretrieve(x, "scrobble.xml")
 
 
-def parse_file_by_moonko(number_of):
-    if number_of < 0 or number_of > 500:
-        number_of = 200
-    tree = ET.parse('scrobble.xml')
-    root = tree.getroot()
-    list3 = []
-    dictionary_per_album = {}
-    counter = 0
-    print(number_of)
-    for x in root.findall('.//name'):
-        if counter >= number_of:
-            break
-        counter += 1
-        print(x.text, counter)
-        try:
-            for g in PyLyrics.getAlbums(x.text):
-                try:
-                    for track in PyLyrics.getTracks(g):
-                        try:
-                            dictionary_per_album[track.artist + "," + track.name] = \
-                                PyLyrics.getLyrics(track.artist, track.name).lower()
-                            # append(PyLyrics.getLyrics(track.artist, track.name).lower())
-                            # print(track.artist, track.name)
-                        except ValueError:
-                            print(track.artist, track.name, " ERROR ")
-                            pass
-                except:
-                    print("MEGA ERROR")
-        except:
-            print("GIG ERROR")
-    with open("pickle" + str(number_of) + ".p", 'wb') as f:
-        #pickle.dump(dicto, f)
-        data2 = pickle.load(open("pickle" + str(number_of) + ".p", 'rb'))
-        print(data2)
-        pickle.dump(dictionary_per_album, f)
-
-
 def parse_file_lil_version(number_of):
     if number_of < 0 or number_of > 500:
         number_of = 200
@@ -62,11 +25,14 @@ def parse_file_lil_version(number_of):
     root = tree.getroot()
     to_simpler_form = WordNetLemmatizer()
     dictionary_per_album = {}
-    dictionary_for_artist = {} # pickle.load(open("pickleLilEvery.p", 'rb'))
+    dictionary_for_artist = {}
+    # in case of too small list of songs to compare
+    # pickle.load(open("pickleLilEvery.p", 'rb'))
     list_of_song_per_album = {}
+    list_of_song_per_artist = {}
     list_of_average = {}
+    list_of_average_per_artist = {}
     counter = 0
-    songs = {}
     print(number_of)
     for x in root.findall('.//name'):
         # starting from always num - 1
@@ -96,6 +62,10 @@ def parse_file_lil_version(number_of):
 
                                 # changing word for simple form running -> run
                                 song = [to_simpler_form.lemmatize(x, 'v') for x in song]
+                                try:
+                                    list_of_song_per_artist[current_artist] += 1
+                                except KeyError:
+                                    list_of_song_per_artist[current_artist] = 1
 
                                 # Counting words per album
                                 try:
@@ -103,17 +73,16 @@ def parse_file_lil_version(number_of):
                                         dictionary_per_album[track.artist + "," + g.name] + Counter(song)
                                     # counting songs per album
                                     list_of_song_per_album[track.artist + "," + g.name] += 1
-                                except:
+                                except KeyError:
                                     dictionary_per_album[track.artist + "," + g.name] = Counter(song)
                                     list_of_song_per_album[track.artist + "," + g.name] = 1
 
-                                # print(dictionary_per_album[track.artist + "," + g.name])
-
                                 # Counting words per artist
+
                                 try:
                                     dictionary_for_artist[track.artist] = \
                                         Counter(dictionary_for_artist[track.artist]) + Counter(song)
-                                except:
+                                except KeyError:
                                     dictionary_for_artist[track.artist] = Counter(song)
                             except:
                                 print(" ERROR ")
@@ -122,7 +91,13 @@ def parse_file_lil_version(number_of):
                         list_of_average[current_artist + "," + g.name] = \
                             sum(dictionary_per_album[current_artist + "," + g.name].values())\
                             / list_of_song_per_album[current_artist + "," + g.name]
-                        print("Average of word per song in specific album :: " + str(list_of_average[current_artist + "," + g.name]))
+
+                        list_of_average_per_artist[current_artist] = \
+                            sum(dictionary_for_artist[current_artist].values())/list_of_song_per_artist[current_artist]
+                        print("Average of word per song in specific album :: " +
+                              str(list_of_average[current_artist + "," + g.name]))
+                        print("Average of word per song :: " +
+                              str(list_of_average_per_artist[current_artist]))
                         # print("Songs Per album " + track.name + " : ", my_bag_c[track.artist + "," + track.album])
                     except:
                         print("MEGA ERROR")
@@ -139,9 +114,12 @@ def parse_file_lil_version(number_of):
         pickle.dump(dictionary_for_artist, l)
     with open("pickleLilWordPerSong" + ".p", 'wb') as d:
         pickle.dump(list_of_average, d)
+    with open("pickleLilFromArtistWordPerSong" + ".p", 'wb') as k:
+        pickle.dump(list_of_average_per_artist, k)
 
 
 def get_music_stats(self):
+    pass
     data2 = pickle.load(open("pickleLilEvery.p", 'rb'))
     print(len(list(data2)))
     print_database(self, data2)
@@ -156,11 +134,7 @@ def print_database(self, data):
 
 def get_music_stats_by_album(self):
     try:
-        data2 = pickle.load(open("pickleLil50.p", 'rb'))
-        data1 = pickle.load(open("pickleLil100.p", 'rb'))
-        data3 = pickle.load(open("pickleLil200.p", 'rb'))
-        data2.update(data3)
-        data2.update(data1)
+        data2 = pickle.load(open("pickleLil300.p", 'rb'))
         print_database(self, data2)
     except IOError:
         print("Nothing")
