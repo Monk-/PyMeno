@@ -6,6 +6,9 @@ from PyLyrics import *
 from nltk.stem.wordnet import WordNetLemmatizer
 import pickle
 import math
+import gui as gui
+import random
+
 
 bag = Counter()
 Catalog = Counter()
@@ -16,7 +19,7 @@ Average_of_word_per_song_per_author = {}
 Average_of_word_per_song = 0
 __min__ = 0
 __max__ = 0
-key_idx = {}
+
 
 
 def change_title(self, path_to_file):
@@ -46,6 +49,14 @@ def bag_of_words(self, artist_name, song_name):
     # bag.update(Counter({k: v for k, v in cnt.items() if v > 2}))
 
 
+def search_for_simmilar(self):
+    made_group_smaller()
+    first_step()
+    second_step()
+    temp = third_step(self)
+    fourth_step(temp)
+
+
 def made_group_smaller():
     global __max__
     global __min__
@@ -57,7 +68,6 @@ def made_group_smaller():
     print("MAX", str(__max__))
     __min__ = min(Average_of_word_per_song_per_author.values())
     print("MIN", str(__min__))
-    first_step()
 
 
 def first_step():
@@ -65,7 +75,6 @@ def first_step():
     data2 = dict(pickle.load(open("pickleLilFromArtistWordPerSong.p", 'rb')))
     Catalog.update(Counter({k: v for k, v in data2.items()}))
     # max__ >= v >= __min__}))
-    second_step()
 
 
 def second_step():
@@ -76,32 +85,72 @@ def second_step():
     ff = {k: v for k, v in data2.items() if k in Catalog.keys()}
     Catalog.clear()
     Catalog.update(Counter(ff))
-    third_step()
 
 
-def third_step():
-    global my_bag_all
+def third_step(self):
     # Defining dictionary of songs with dictionary based on amount of shared most popular words in users libraries
+    global my_bag_all
     global my_bag_all
     data2 = dict(pickle.load(open("pickleLilFromArtistWordPerSong.p", 'rb')))
     shared_items = {}
-    shared_items_add = {}
+
     for v in my_bag.values():
         my_bag_all += v
     # print(Catalog.items())
     for k, v in Catalog.items():
-        # print(Counter(v).items())
-        # print(my_bag_all.items())
         shared_items[k] = len(set(Counter(v)) & set(my_bag_all))
     # print(shared_items)
 
-    # my personal method
-    for v in sorted(shared_items, key=shared_items.get, reverse=True):
-        print(v, shared_items[v])
-    ff = Counter()
-    ff.update(Counter({k: v for k, v in shared_items.items() if __max__ >= data2[k] >= __min__}))
-    print(ff)
+    dd = Counter({k: v for k, v in shared_items.items() if(__max__ >= data2[k] >= __min__) is True})
+    kk = dd.most_common(15)
+
+    for x in sorted(kk, key=lambda d: d[0]):
+        print(x)
+        gui.GUI.insert_to_left_list_box(self, x[0])
+    b, c = zip(*sorted(kk, key=lambda d: d[0]))
+    return b
     # counter_cosine_similarity
+
+
+def fourth_step(list_chosen):
+    # my personal method
+    shared_items_add = {}
+    data2 = pickle.load(open("pickleLil300.p", 'rb'))
+    data2.update(pickle.load(open("pickleLil500.p", 'rb')))
+    data2.update(pickle.load(open("pickleLil303.p", 'rb')))
+    # g = Counter({k: v for k, v in data2.items() if k in })
+    # print(data2)
+    print(list_chosen)
+    for k, v in data2.items():
+        temp = k.split(',', 1)
+        # print(list_chosen)
+        if temp[0] in list_chosen:
+            shared_items_add[k] = counter_cosine_similarity(Counter(v), my_bag_all)
+
+    temp = Counter({k: v for k, v in shared_items_add.items() if v not in my_bag_all.keys()})
+    b, c = zip(*sorted(temp.most_common(40), key=lambda d: d[0]))
+    print(b)
+    shared_items_add.clear()
+    for k in b:
+        temp = k.split(',', 1)
+        albums = PyLyrics.getAlbums(singer=temp[0])
+        for x in albums:
+            if x.name == temp[1]:
+                tracks = x.tracks()
+                a = -1
+                for track in tracks:
+                    a += 1
+                num = random.randint(0, a)
+                print(temp[0], ":", tracks[num].name)
+                shared_items_add[k] = tracks[num].name
+
+
+def fifth_step():
+    pass
+
+
+def another_try():
+    shared_items_add = {}
     for k, v in Catalog.items():
         shared_items_add[k] = counter_cosine_similarity(Counter(v), my_bag_all)
     print(shared_items_add)
@@ -116,3 +165,30 @@ def counter_cosine_similarity(c1, c2):
     magA = math.sqrt(sum(c1.get(k, 0)**2 for k in terms))
     magB = math.sqrt(sum(c2.get(k, 0)**2 for k in terms))
     return dotprod / (magA * magB)
+
+
+def look_for_song():
+    data2 = pickle.load(open("pickleLil300.p", 'rb'))
+    data2.update(pickle.load(open("pickleLil500.p", 'rb')))
+    data2.update(pickle.load(open("pickleLil303.p", 'rb')))
+
+
+def another_try_by_lily(list_chosen):
+    shared_items_add = {}
+    data2 = pickle.load(open("pickleLil300.p", 'rb'))
+    data2.update(pickle.load(open("pickleLil500.p", 'rb')))
+    data2.update(pickle.load(open("pickleLil303.p", 'rb')))
+    # g = Counter({k: v for k, v in data2.items() if k in })
+    # print(data2)
+    print(list_chosen)
+    for c, w in my_bag.items():
+        for k, v in data2.items():
+            temp = k.split(',', 1)
+            # print(list_chosen)
+            if temp[0] in list_chosen:
+                shared_items_add[c + "," + k] = counter_cosine_similarity(Counter(v), Counter(w))
+
+    print(shared_items_add)
+    #for v in sorted(shared_items_add, key=shared_items_add.get, reverse=True):
+       # if v not in my_bag_all.keys():
+          #  print(v, shared_items_add[v])

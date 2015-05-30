@@ -80,7 +80,7 @@ class GUI(Frame):
             for filename in file_names:
                 alMus.change_title(self, os.path.join(dir_path, filename))
         self.config(cursor="")
-        alMus.made_group_smaller()
+        alMus.search_for_simmilar(self)
 
     def insert_to_right_list_box(self, artist, song):
         self.right_list.insert(END, artist + " - " + song)
