@@ -21,7 +21,6 @@ __min__ = 0
 __max__ = 0
 
 
-
 def change_title(self, path_to_file):
     try:
         audio = ID3(path_to_file)
@@ -49,12 +48,24 @@ def bag_of_words(self, artist_name, song_name):
     # bag.update(Counter({k: v for k, v in cnt.items() if v > 2}))
 
 
-def search_for_simmilar(self):
+def search_for_simmilar_ver_2(self):
+    # Algorithm II
     made_group_smaller()
     first_step()
     second_step()
     temp = third_step(self)
     fourth_step(temp)
+    fifth_step()
+
+
+def search_for_simmilar_ver_1(self):
+    # Algorithm II
+    made_group_smaller()
+    first_step()
+    second_step()
+    another_try()
+    # fourth_step()
+    fifth_step()
 
 
 def made_group_smaller():
@@ -120,7 +131,7 @@ def fourth_step(list_chosen):
     data2.update(pickle.load(open("pickleLil303.p", 'rb')))
     # g = Counter({k: v for k, v in data2.items() if k in })
     # print(data2)
-    print(list_chosen)
+    # print(list_chosen)
     for k, v in data2.items():
         temp = k.split(',', 1)
         # print(list_chosen)
@@ -129,8 +140,9 @@ def fourth_step(list_chosen):
 
     temp = Counter({k: v for k, v in shared_items_add.items() if v not in my_bag_all.keys()})
     b, c = zip(*sorted(temp.most_common(40), key=lambda d: d[0]))
-    print(b)
+    # print(b)
     shared_items_add.clear()
+    print("Suggest : ")
     for k in b:
         temp = k.split(',', 1)
         albums = PyLyrics.getAlbums(singer=temp[0])
