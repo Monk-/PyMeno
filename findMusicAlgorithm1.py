@@ -139,7 +139,7 @@ def fourth_step(list_chosen):
             shared_items_add[k] = counter_cosine_similarity(Counter(v), my_bag_all)
 
     temp = Counter({k: v for k, v in shared_items_add.items() if v not in my_bag_all.keys()})
-    b, c = zip(*sorted(temp.most_common(40), key=lambda d: d[0]))
+    b, c = zip(*sorted(temp.most_common(20), key=lambda d: d[0]))
     # print(b)
     shared_items_add.clear()
     print("Suggest : ")
@@ -177,12 +177,6 @@ def counter_cosine_similarity(c1, c2):
     magA = math.sqrt(sum(c1.get(k, 0)**2 for k in terms))
     magB = math.sqrt(sum(c2.get(k, 0)**2 for k in terms))
     return dotprod / (magA * magB)
-
-
-def look_for_song():
-    data2 = pickle.load(open("pickleLil300.p", 'rb'))
-    data2.update(pickle.load(open("pickleLil500.p", 'rb')))
-    data2.update(pickle.load(open("pickleLil303.p", 'rb')))
 
 
 def another_try_by_lily(list_chosen):
