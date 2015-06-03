@@ -8,7 +8,10 @@ import pickle
 import math
 import gui as gui
 import random
+from tkinter import END
 
+# Important to not put the same values into users library again
+List_artists_songs = []
 # kind of temporary
 Catalog = Counter()
 # Dict of words per artist
@@ -30,12 +33,17 @@ __max__ = 0
 def change_title(self, path_to_file):
     """
     This function takes out information about author and title of songs from file
-    and gives to bag of words
     """
     try:
         audio = ID3(path_to_file)
-        self.insert_to_right_list_box(audio['TPE1'].text[0], audio["TIT2"].text[0])
-        bag_of_words(audio['TPE1'].text[0], audio["TIT2"].text[0])
+        # Checking if filed was already parsed
+        if str(audio['TPE1'].text[0] + "," + audio["TIT2"].text[0]) not in List_artists_songs:
+            self.insert_to_right_list_box(audio['TPE1'].text[0], audio["TIT2"].text[0])
+            bag_of_words(audio['TPE1'].text[0], audio["TIT2"].text[0])
+            List_artists_songs.append(str(audio['TPE1'].text[0] + "," + audio["TIT2"].text[0]))
+        else:
+            # If was
+            print("That was already parsed", " : \n", audio['TPE1'].text[0], "::", audio["TIT2"].text[0])
     except ValueError:
         pass
 
@@ -195,6 +203,7 @@ def six_step(self, shared_items_add):
     """
     This function display chosen titles on GUI
     """
+    self.left_list.delete(0, END)
     for k, v in shared_items_add.items():
         temp = k.split(',', 1)
         gui.GUI.insert_to_left_list_box(self, temp[0] + " : " + v)
