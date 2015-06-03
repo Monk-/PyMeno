@@ -27,7 +27,6 @@ def parse_file_lil_version(number_of):
     dictionary_per_album = {}
     # in case of too small list of songs to compare
     dictionary_for_artist = pickle.load(open("pickleLilEvery.p", 'rb'))
-    dictionary_for_artist
     list_of_song_per_album = {}
     list_of_song_per_artist = {}
     list_of_average = pickle.load(open("pickleLilWordPerSong.p", 'rb'))
