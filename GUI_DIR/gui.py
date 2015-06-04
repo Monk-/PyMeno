@@ -1,20 +1,21 @@
 """gui and gui methods"""
 from tkinter import Frame, Listbox, Menu, LEFT, RIGHT, BOTH, END, filedialog, simpledialog
 import os
-import find_music_algorithm as alMus
 import webbrowser
-import database_management as datMan
 
 
 class GUI(Frame):  # pylint: disable=too-many-ancestors
     """class for GUI"""
-    def __init__(self, parent):
+    def __init__(self, parent, db, pab, alg):
         """init"""
         Frame.__init__(self, parent)
         self.right_list = Listbox(parent)
         self.left_list = Listbox(parent)
-        self.left_list.bind("<Double-Button-1>", on_double_click)
+        self.left_list.bind("<Double-Button-1>", self.on_double_click)
         self.parent = parent
+        self.db_creator = db
+        self.path_and_bag = pab
+        self.alg_do = alg
         self.init_ui()
 
     def init_ui(self):
@@ -40,10 +41,10 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         file_menu.add_command(label="Exit", underline=0, command=self.on_exit)
 
         menu2_parse.add_command(label="Download artists list", underline=0,
-                                command=datMan.download_list_of_artists)
+                                command=self.db_creator.download_list_of_artists)
         menu2_parse.\
             add_command(label="Parse artists information to database", underline=0,
-                        command=go_to_lilis_parsing)
+                        command=self.go_to_lilis_parsing)
         menu2_parse.add_command(label="Show", underline=0, command=self.show_stats)
         menu2_parse.add_command(label="Show by album", underline=0,
                                 command=self.show_stats_by_album)
@@ -51,13 +52,17 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         menu_bar.add_cascade(label="File", underline=0, menu=file_menu)
         menu_bar.add_cascade(label="Data", underline=0, menu=menu2_parse)
 
-    def show_stats(self):
+    @staticmethod
+    def show_stats():
         """show stats in listbox"""
-        datMan.get_music_stats(self)
+        pass
+        # datMan.get_music_stats(self)
 
-    def show_stats_by_album(self):
+    @staticmethod
+    def show_stats_by_album():
         """show stats by album in listbox"""
-        datMan.get_music_stats_by_album(self)
+        pass
+        # datMan.get_music_stats_by_album(self)
 
     def on_exit(self):
         """quit"""
@@ -69,35 +74,62 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                                            title='Please select a directory')
         self.config(cursor="wait")
         self.update()
+        list_of_songs = []
         for data in os.walk(dir_name):
             for filename in data[2]:
-                alMus.change_title(self, os.path.join(data[0], filename))
+                list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
         self.config(cursor="")
-        alMus.search_for_simmilar_ver_2(self)
+        shared_items_add = self.alg_do.search_for_simmilar_ver_2()
+        self.left_list.delete(0, END)
+        self.right_list.delete(0, END)
+        for x in list_of_songs:
+            temp = x.split(',', 1)
+            self.insert_to_right_list_box(temp[0], temp[1])
+        for key, value in shared_items_add.items():
+            temp = key.split(',', 1)
+            self.insert_to_left_list_box(temp[0] + " : " + value)
 
     def open_menu_ver_2(self):
         """select directory with music, alg 2"""
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
+        list_of_songs = []
         self.config(cursor="wait")
         self.update()
         for data in os.walk(dir_name):
             for filename in data[2]:
-                alMus.change_title(self, os.path.join(data[0], filename))
+                list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
         self.config(cursor="")
-        alMus.search_for_simmilar_ver_1(self)
+        shared_items_add = self.alg_do.search_for_simmilar_ver_1()
+        self.left_list.delete(0, END)
+        self.right_list.delete(0, END)
+        for x in list_of_songs:
+            temp = x.split(',', 1)
+            self.insert_to_right_list_box(temp[0], temp[1])
+        for key, value in shared_items_add.items():
+            temp = key.split(',', 1)
+            self.insert_to_left_list_box(temp[0] + " : " + value)
 
     def open_menu_ver_3(self):
         """select directory with music, alg 3"""
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
+        list_of_songs = []
         self.config(cursor="wait")
         self.update()
         for data in os.walk(dir_name):
             for filename in data[2]:
-                alMus.change_title(self, os.path.join(data[0], filename))
+                list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
         self.config(cursor="")
-        alMus.search_for_simmilar_ver_3(self)
+        shared_items_add = self.alg_do.search_for_simmilar_ver_3()
+        self.left_list.delete(0, END)
+        self.right_list.delete(0, END)
+        for x in list_of_songs:
+            temp = x.split(',', 1)
+            self.insert_to_right_list_box(temp[0], temp[1])
+        for key, value in shared_items_add.items():
+            temp = key.split(',', 1)
+            self.insert_to_left_list_box(temp[0] + " : " + value)
 
     def insert_to_right_list_box(self, artist, song):
         """insert to right listbox for other methods"""
@@ -107,19 +139,17 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         """insert to left listbox for other methods"""
         self.left_list.insert(END, artist)
 
+    def go_to_lilis_parsing(self):
+        """how many artist do you want to parse"""
+        number = int(simpledialog.askstring('Number', 'How many artists?'))
+        print(number)
+        self.db_creator.parse_file_lil_version(number)
 
-def go_to_lilis_parsing():
-    """how many artist do you want to parse"""
-    number = int(simpledialog.askstring('Number', 'How many artists?'))
-    print(number)
-    datMan.parse_file_lil_version(number)
-
-
-def on_double_click(event):
-    """open youtube on double click"""
-    new = 2  # open in a new tab, if possible
-    widget = event.widget
-    selection = widget.curselection()
-    value = widget.get(selection[0])
-    url = alMus.youtube_search(value)
-    webbrowser.open(url, new=new)
+    def on_double_click(self, event):
+        """open youtube on double click"""
+        new = 2  # open in a new tab, if possible
+        widget = event.widget
+        selection = widget.curselection()
+        value = widget.get(selection[0])
+        url = self.alg_do.youtube_search(value)
+        webbrowser.open(url, new=new)
