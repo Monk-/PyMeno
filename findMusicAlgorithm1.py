@@ -11,9 +11,9 @@ import random
 from tkinter import END
 
 # Important to not put the same values into users library again
-List_artists_songs = []
+list_artist_songs = []
 # kind of temporary
-Catalog = Counter()
+catalog = Counter()
 # Dict of words per artist
 my_bag = {}
 # Dict of songs per artist
@@ -22,9 +22,9 @@ my_bag_c = {}
 # Dict of words per library
 my_bag_all = Counter()
 # There we have a dict of average of word per song for each artist
-Average_of_word_per_song_per_author = {}
+average_of_word_per_song_per_author = {}
 # There we have a dict of average of word per song for all music user's library
-Average_of_word_per_song = 0
+average_of_word_per_song = 0
 # MIN and MAX average of word per song
 __min__ = 0
 __max__ = 0
@@ -37,10 +37,10 @@ def change_title(self, path_to_file):
     try:
         audio = ID3(path_to_file)
         # Checking if filed was already parsed
-        if str(audio['TPE1'].text[0] + "," + audio["TIT2"].text[0]) not in List_artists_songs:
+        if str(audio['TPE1'].text[0] + "," + audio["TIT2"].text[0]) not in list_artist_songs:
             self.insert_to_right_list_box(audio['TPE1'].text[0], audio["TIT2"].text[0])
             bag_of_words(audio['TPE1'].text[0], audio["TIT2"].text[0])
-            List_artists_songs.append(str(audio['TPE1'].text[0] + "," + audio["TIT2"].text[0]))
+            list_artist_songs.append(str(audio['TPE1'].text[0] + "," + audio["TIT2"].text[0]))
         else:
             # If was
             print("That was already parsed", " : \n", audio['TPE1'].text[0], "::", audio["TIT2"].text[0])
@@ -109,12 +109,12 @@ def made_group_smaller():
     global __max__
     global __min__
     for x in sorted(list(my_bag), key=lambda s: s.lower()):
-        Average_of_word_per_song_per_author[x] = len(my_bag[x])/my_bag_c[x]
+        average_of_word_per_song_per_author[x] = len(my_bag[x])/my_bag_c[x]
         print(x, " : Average of words per author : ", len(my_bag[x])/my_bag_c[x])
     print(dict(my_bag_c))
-    __max__ = max(Average_of_word_per_song_per_author.values())
+    __max__ = max(average_of_word_per_song_per_author.values())
     print("MAX", str(__max__))
-    __min__ = min(Average_of_word_per_song_per_author.values())
+    __min__ = min(average_of_word_per_song_per_author.values())
     print("MIN", str(__min__))
 
 
@@ -122,10 +122,10 @@ def first_step():
     """
     This function loads a date from pickle and put them into dict
     """
-    global Catalog
+    global catalog
     data2 = dict(pickle.load(open("pickleLilEvery.p", 'rb')))
-    Catalog.clear()
-    Catalog.update({k: v for k, v in data2.items()})
+    catalog.clear()
+    catalog.update({k: v for k, v in data2.items()})
 
 
 def second_step():
@@ -137,7 +137,7 @@ def second_step():
     data2 = dict(pickle.load(open("pickleLilFromArtistWordPerSong.p", 'rb')))
     # Here we are making an intersections between
     # all popular words in our library and each song in library of comparing songs
-    for k, v in Catalog.items():
+    for k, v in catalog.items():
         shared_items[k] = len(set(Counter(v)) & set(my_bag_all))
     # There we choose only authors with average of word per song between max and min of our music library
     kk = Counter({k: v for k, v in shared_items.items() if(__max__ >= data2[k] >= __min__) is True}).most_common(15)
@@ -152,7 +152,7 @@ def another_try():
     """
     shared_items = {}
     data2 = dict(pickle.load(open("pickleLilFromArtistWordPerSong.p", 'rb')))
-    for k, v in Catalog.items():
+    for k, v in catalog.items():
         shared_items[k] = counter_cosine_similarity(Counter(v), my_bag_all)
     print(shared_items)
     kk = Counter({k: v for k, v in shared_items.items() if(__max__ >= data2[k] >= __min__) is True}).most_common(15)
