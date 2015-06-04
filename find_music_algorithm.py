@@ -13,6 +13,14 @@ import math
 import gui as gui
 import random
 from tkinter import END
+import argparse
+from googleapiclient.discovery import build
+
+
+# YouTube API
+DEVELOPER_KEY = "AIzaSyCn9Pk4vWC8LjjIKqol5gkku20DI0IRurU"
+YOUTUBE_API_SERVICE_NAME = "youtube"
+YOUTUBE_API_VERSION = "v3"
 
 # Important to not put the same values into users library again
 LIST_ARTIST_SONGS = []
@@ -52,9 +60,9 @@ def change_title(self, path_to_file):
 
 def bag_of_words(artist_name, song_name):
     """
-    Simple bag of words
-    We used here a lemmatize to simplify form of words for example running -> run
-    And stopwords to remove them from dict
+        Simple bag of words
+        We used here a lemmatize to simplify form of words for example running -> run
+        And stopwords to remove them from dict
     """
     to_simpler_form = WordNetLemmatizer()
     song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
@@ -75,10 +83,10 @@ def bag_of_words(artist_name, song_name):
 
 def search_for_simmilar_ver_2(self):
     """
-    # Algorithm II #
-    We parts our code to have more visibility of what we doing
-    There is algorithm which at the beginning catch
-    the number of intersections between dicts then use cosine similarity
+        # Algorithm II #
+        We parts our code to have more visibility of what we doing
+        There is algorithm which at the beginning catch
+        the number of intersections between dicts then use cosine similarity
     """
     my_bag_all = Counter()
     for value in MY_BAG.values():
@@ -93,8 +101,8 @@ def search_for_simmilar_ver_2(self):
 
 def search_for_simmilar_ver_1(self):
     """
-    # Algorithm I #
-    This algorithm based mainly on cosine similarity
+        # Algorithm I #
+        This algorithm based mainly on cosine similarity
     """
     my_bag_all = Counter()
     for value in MY_BAG.values():
@@ -109,8 +117,8 @@ def search_for_simmilar_ver_1(self):
 
 def made_group_smaller():
     """
-    This function is calculating an average of
-    words per author and defining max and min
+        This function is calculating an average of
+        words per author and defining max and min
     """
     for artist in sorted(list(MY_BAG), key=lambda s: s.lower()):
         average = len(MY_BAG[artist])/MY_BAG_C[artist]
@@ -127,7 +135,7 @@ def made_group_smaller():
 
 def first_step():
     """
-    This function loads a date from pickle and put them into dict
+        This function loads a date from pickle and put them into dict
     """
     data2 = dict(pickle.load(open("pickleLilEvery.p", 'rb')))
     CATALOG.clear()
@@ -136,8 +144,8 @@ def first_step():
 
 def second_step(min_max, my_bag_all):
     """
-    This function is defining dictionary of songs with dictionary
-    based on amount of shared most popular words in users libraries
+        This function is defining dictionary of songs with dictionary
+        based on amount of shared most popular words in users libraries
     """
     shared_items = {}
     data_from_pickle = dict(pickle.load(
@@ -160,8 +168,8 @@ def second_step(min_max, my_bag_all):
 
 def another_try(min_max, my_bag_all):
     """
-    This function is another option of comparing, this time is depend on cosine similarity.
-    The purpose is to find the perfect artist
+        This function is another option of comparing, this time is depend on cosine similarity.
+        The purpose is to find the perfect artist
     """
     shared_items = {}
     data_from_pickle = dict(pickle.load(open("pickleLilFromArtistWordPerSong.p", 'rb')))
@@ -179,8 +187,8 @@ def another_try(min_max, my_bag_all):
 
 def fourth_step(list_chosen, my_bag_all):
     """
-    This function make another comparing, this time is depend on cosine similarity.
-    The purpose is to find the perfect album from chosen artist
+        This function make another comparing, this time is depend on cosine similarity.
+        The purpose is to find the perfect album from chosen artist
     """
     shared_items_add = {}
     data_from_pickle = pickle.load(open("pickleLil300.p", 'rb'))
@@ -202,7 +210,7 @@ def fourth_step(list_chosen, my_bag_all):
 
 def fifth_step(list_of_keys):
     """
-    This function is randomly choosing a song from chosen album
+        This function is randomly choosing a song from chosen album
     """
     shared_items_add = {}
     print("Suggest : ")
@@ -220,7 +228,7 @@ def fifth_step(list_of_keys):
 
 def six_step(self, shared_items_add):
     """
-    This function display chosen titles on GUI
+        This function display chosen titles on GUI
     """
     self.left_list.delete(0, END)
     for key, value in shared_items_add.items():
@@ -230,8 +238,8 @@ def six_step(self, shared_items_add):
 
 def counter_cosine_similarity(vector1, vector2):
     """
-    This function calculate similarity between vector
-    the closer to 1 the more similar are the songs
+        This function calculate similarity between vector
+        the closer to 1 the more similar are the songs
     """
     # a * b = ||a|| ||b|| cos(theta)
     terms = set(vector1).union(vector2)
@@ -242,3 +250,43 @@ def counter_cosine_similarity(vector1, vector2):
     # || B ||
     magnitude_b = math.sqrt(sum(vector2.get(key, 0)**2 for key in terms))
     return dot_product / (magnitude_a * magnitude_b)
+
+
+def youtube_search(to_search):
+    """
+        This function finds url to our songs throw Youtube API
+    """
+    parse = argparse.ArgumentParser()
+    parse.add_argument("--q", help="Search term", default=to_search)
+    parse.add_argument("--max-results", help="Max results", default=25)
+    args = parse.parse_args()
+    youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
+
+    # Call the search.list method to retrieve results matching the specified
+    # query term.
+    search_response = youtube.search().list(q=args.q,
+                                            part="id,snippet",
+                                            maxResults=args.max_results,
+                                            order="viewCount").execute()
+
+    videos = []
+    channels = []
+    playlists = []
+
+    # Add each result to the appropriate list, and then display the lists of
+    # matching videos, channels, and playlists.
+    for search_result in search_response.get("items", []):
+        if search_result["id"]["kind"] == "youtube#video":
+            videos.append(search_result["id"]["videoId"])
+        elif search_result["id"]["kind"] == "youtube#channel":
+            channels.append("%s (%s)" % (search_result["snippet"]["title"],
+                                         search_result["id"]["channelId"]))
+        elif search_result["id"]["kind"] == "youtube#playlist":
+            playlists.append("%s (%s)" % (search_result["snippet"]["title"],
+                                          search_result["id"]["playlistId"]))
+
+    try:
+        return "https://www.youtube.com/watch?v=" + videos[0]
+    except UnicodeEncodeError:
+        pass
+
