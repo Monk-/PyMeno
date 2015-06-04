@@ -93,7 +93,7 @@ def search_for_simmilar_ver_2(self):
         my_bag_all += value
     temp = made_group_smaller()
     first_step()
-    temp = second_step(temp, my_bag_all)
+    temp = second_step_ver1(temp, my_bag_all)
     temp = fourth_step(temp, my_bag_all)
     temp = fifth_step(temp)
     six_step(self, temp)
@@ -109,8 +109,19 @@ def search_for_simmilar_ver_1(self):
         my_bag_all += value
     temp = made_group_smaller()
     first_step()
-    temp = another_try(temp, my_bag_all)
+    temp = second_step_ver2(temp, my_bag_all)
     temp = fourth_step(temp, my_bag_all)
+    temp = fifth_step(temp)
+    six_step(self, temp)
+
+
+def search_for_simmilar_ver_3(self):
+    """
+        # Algorithm III #
+    """
+    temp = made_group_smaller()
+    first_step()
+    temp = second_step_ver3(temp)
     temp = fifth_step(temp)
     six_step(self, temp)
 
@@ -142,7 +153,7 @@ def first_step():
     CATALOG.update({key: value for key, value in data2.items()})
 
 
-def second_step(min_max, my_bag_all):
+def second_step_ver1(min_max, my_bag_all):
     """
         This function is defining dictionary of songs with dictionary
         based on amount of shared most popular words in users libraries
@@ -166,7 +177,7 @@ def second_step(min_max, my_bag_all):
     return list(keys_list)
 
 
-def another_try(min_max, my_bag_all):
+def second_step_ver2(min_max, my_bag_all):
     """
         This function is another option of comparing, this time is depend on cosine similarity.
         The purpose is to find the perfect artist
@@ -183,6 +194,32 @@ def another_try(min_max, my_bag_all):
         chosen_data = Counter({key: value for key, value in shared_items.items()})
     keys_list = dict(sorted(chosen_data.most_common(20), key=lambda data: data[1])).keys()
     return list(keys_list)
+
+
+def second_step_ver3(min_max):
+    """
+        This function is another option of comparing, this time is depend on cosine similarity.
+        The purpose is to find the perfect artist similar to another in user's library
+    """
+    shared_items = []
+    shared_items_album = {}
+    data_from_pickle = pickle.load(open("pickleLil300.p", 'rb'))
+    data_from_pickle.update(pickle.load(open("pickleLil500.p", 'rb')))
+    data_from_pickle.update(pickle.load(open("pickleLil303.p", 'rb')))
+    for key, value in MY_BAG.items():
+        shared_items_album.clear()
+        for key_lib, value_lib in data_from_pickle.items():
+            s = key_lib.replace('_', ' ')
+            temp = s.split(',', 1)
+            if key != temp[0]:
+                shared_items_album[key_lib] = counter_cosine_similarity(Counter(value), value_lib)
+
+        [shared_items.append(x) for x in list(dict(sorted(Counter(shared_items_album).most_common(40),
+                                                          key=lambda data: data[1])).keys())]
+    data_from_pickle = dict(pickle.load(open("pickleLilFromArtistWordPerSong.p", 'rb')))
+    chosen_data = [key for key in shared_items
+                   if(min_max[1] >= data_from_pickle[key.split(',', 1)[0]] >= min_max[0]) is True]
+    return chosen_data
 
 
 def fourth_step(list_chosen, my_bag_all):
