@@ -3,7 +3,7 @@ import collections
 import re
 import os
 import find_music_algorithm as alMus
-import databaseManagement as datMan
+import database_management as datMan
 
 
 class GUI(Frame):
