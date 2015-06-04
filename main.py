@@ -1,11 +1,10 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from tkinter import *
+"""main class"""
+from tkinter import Tk
 from gui import GUI
 
 
 def create_gui():
+    """create gui"""
     root = Tk()
     root.geometry("800x400+300+300")
     GUI(root)
