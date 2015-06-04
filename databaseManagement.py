@@ -1,3 +1,4 @@
+from _ast import arg
 from urllib import request
 import xml.etree.ElementTree as ET
 import pickle
@@ -8,8 +9,60 @@ from PyLyrics import *
 from nltk.stem.wordnet import WordNetLemmatizer
 import gui as gui
 from tkinter import END
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+import argparse
+
+
+DEVELOPER_KEY = "AIzaSyCn9Pk4vWC8LjjIKqol5gkku20DI0IRurU"
+YOUTUBE_API_SERVICE_NAME = "youtube"
+YOUTUBE_API_VERSION = "v3"
 
 my_bag_c = {}
+
+def youtube_search(to_search):
+
+  parse = argparse.ArgumentParser()
+
+  parse.add_argument("--q", help="Search term", default=to_search)
+  parse.add_argument("--max-results", help="Max results", default=25)
+  args = parse.parse_args()
+  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
+    developerKey=DEVELOPER_KEY)
+
+  # Call the search.list method to retrieve results matching the specified
+  # query term.
+  search_response = youtube.search().list(
+    q=args.q,
+    part="id,snippet",
+    maxResults=args.max_results,
+    order="viewCount"
+  ).execute()
+
+
+  videos = []
+  channels = []
+  playlists = []
+
+  # Add each result to the appropriate list, and then display the lists of
+  # matching videos, channels, and playlists.
+  for search_result in search_response.get("items", []):
+    if search_result["id"]["kind"] == "youtube#video":
+        videos.append(search_result["id"]["videoId"])
+    elif search_result["id"]["kind"] == "youtube#channel":
+        channels.append("%s (%s)" % (search_result["snippet"]["title"],
+                                   search_result["id"]["channelId"]))
+    elif search_result["id"]["kind"] == "youtube#playlist":
+        playlists.append("%s (%s)" % (search_result["snippet"]["title"],
+                                    search_result["id"]["playlistId"]))
+
+  try:
+      return "https://www.youtube.com/watch?v=" + videos[0]
+     # print ("Channels:\n", "\n".join(channels))
+     # print("Playlists:\n", "\n".join(playlists))
+  except UnicodeEncodeError:
+      pass
+
 
 
 def download_list_of_artists():

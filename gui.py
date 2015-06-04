@@ -4,7 +4,7 @@ import re
 import os
 import findMusicAlgorithm1 as alMus
 import databaseManagement as datMan
-
+import webbrowser
 
 class GUI(Frame):
     """class for GUI"""
@@ -13,6 +13,7 @@ class GUI(Frame):
         Frame.__init__(self, parent)
         self.right_list = Listbox(parent)
         self.left_list = Listbox(parent)
+        self.left_list.bind("<Double-Button-1>", self.OnDouble)
         self.parent = parent
         self.init_ui()
 
@@ -95,3 +96,11 @@ class GUI(Frame):
 
     def insert_to_left_list_box(self, artist):
         self.left_list.insert(END, artist)
+
+    def OnDouble(self, event):
+        new = 2 # open in a new tab, if possible
+        widget = event.widget
+        selection=widget.curselection()
+        value = widget.get(selection[0])
+        url = datMan.youtube_search(value)
+        webbrowser.open(url,new=new)
