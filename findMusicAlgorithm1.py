@@ -140,7 +140,10 @@ def second_step():
     for k, v in Catalog.items():
         shared_items[k] = len(set(Counter(v)) & set(my_bag_all))
     # There we choose only authors with average of word per song between max and min of our music library
-    kk = Counter({k: v for k, v in shared_items.items() if(__max__ >= data2[k] >= __min__) is True}).most_common(15)
+    if __max__ != __min__:
+        kk = Counter({k: v for k, v in shared_items.items() if(__max__ >= data2[k] >= __min__) is True}).most_common(15)
+    else:
+        kk = Counter({k: v for k, v in shared_items.items()}).most_common(15)
     b, c = zip(*sorted(kk, key=lambda d: d[1], reverse=True))
     return b
 
@@ -155,7 +158,10 @@ def another_try():
     for k, v in Catalog.items():
         shared_items[k] = counter_cosine_similarity(Counter(v), my_bag_all)
     print(shared_items)
-    kk = Counter({k: v for k, v in shared_items.items() if(__max__ >= data2[k] >= __min__) is True}).most_common(15)
+    if __max__!=__min__:
+        kk = Counter({k: v for k, v in shared_items.items() if(__max__ >= data2[k] >= __min__) is True}).most_common(15)
+    else:
+        kk = Counter({k: v for k, v in shared_items.items()}).most_common(15)
     b, c = zip(*sorted(kk, key=lambda d: d[1], reverse=True))
     return b
 
@@ -176,7 +182,7 @@ def fourth_step(list_chosen):
             shared_items_add[k] = counter_cosine_similarity(Counter(v), my_bag_all)
     # In shared_items[artist,album} we have value of similarity
     temp = Counter({k: v for k, v in shared_items_add.items() if v not in my_bag_all.keys()})
-    print(temp)
+#    print(temp)
     b, c = zip(*sorted(temp.most_common(20), key=lambda d: d[0]))
     return b
 
