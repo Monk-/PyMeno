@@ -2,7 +2,7 @@ from tkinter import Frame, Listbox, Menu, LEFT, RIGHT, BOTH, END, filedialog, si
 import collections
 import re
 import os
-import findMusicAlgorithm1 as alMus
+import find_music_algorithm as alMus
 import databaseManagement as datMan
 import webbrowser
 
