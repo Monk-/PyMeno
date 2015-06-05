@@ -8,6 +8,7 @@ import pickle
 import math
 import random
 import argparse
+import queue
 from googleapiclient.discovery import build
 
 
@@ -51,7 +52,7 @@ class FindMusic(object):
         temp = self.fifth_step(temp)
         return self.six_step(temp)
 
-    def search_for_simmilar_ver_1(self):
+    def search_for_simmilar_ver_1(self, queues):
         """
             # Algorithm I #
             This algorithm based mainly on cosine similarity
@@ -63,7 +64,7 @@ class FindMusic(object):
         self.first_step()
         temp = self.second_step_ver2(temp, my_bag_all)
         temp = self.fourth_step(temp, my_bag_all)
-        temp = self.fifth_step(temp)
+        temp = self.fifth_step(temp, queues)
         return self.six_step(temp)
 
     def search_for_simmilar_ver_3(self):
@@ -190,7 +191,7 @@ class FindMusic(object):
         return list(keys_list)
 
     @staticmethod
-    def fifth_step(list_of_keys):
+    def fifth_step(list_of_keys, queues):
         """
             This function is randomly choosing a song from chosen album
         """
@@ -203,6 +204,7 @@ class FindMusic(object):
                 if album.name == temp[1]:
                     tracks = album.tracks()
                     num = random.randint(0, len([track.name for track in tracks])-1)
+                    queues.put(temp[0], ":", tracks[num].name)
                     print(temp[0], ":", tracks[num].name)
                     shared_items_add[key] = tracks[num].name
         return shared_items_add
@@ -264,5 +266,5 @@ class FindMusic(object):
 
         try:
             return "https://www.youtube.com/watch?v=" + videos[0]
-        except UnicodeEncodeError:
-            pass
+        except (UnicodeEncodeError, IndexError) as evil:
+            return "https://www.youtube.com/watch?v=" + "_NXrTujMP50"

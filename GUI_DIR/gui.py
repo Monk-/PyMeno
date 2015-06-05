@@ -1,11 +1,18 @@
 """gui and gui methods"""
+import glob
+import threading
 from tkinter import Frame, Listbox, Menu, LEFT, RIGHT, BOTH, END, filedialog, simpledialog
+from tkinter import ttk
 import os
 import webbrowser
+import time
+from os.path import isfile
+import math
 
 
 class GUI(Frame):  # pylint: disable=too-many-ancestors
     """class for GUI"""
+
     def __init__(self, parent, db, pab, alg):
         """init"""
         Frame.__init__(self, parent)
@@ -16,6 +23,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         self.db_creator = db
         self.path_and_bag = pab
         self.alg_do = alg
+        self.queue = queue.Queue()
         self.init_ui()
 
     def init_ui(self):
@@ -52,6 +60,12 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         menu_bar.add_cascade(label="File", underline=0, menu=file_menu)
         menu_bar.add_cascade(label="Data", underline=0, menu=menu2_parse)
 
+        """sub_menu = Menu(menu_bar, tearoff=False)
+        sub_menu.add_command(label="Video")
+        sub_menu.add_command(label="Channel")
+        sub_menu.add_command(label="Playlist")
+        menu2_parse.add_cascade(label='Youtube search', menu=sub_menu, underline=0)"""
+
     @staticmethod
     def show_stats():
         """show stats in listbox"""
@@ -82,11 +96,12 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         shared_items_add = self.alg_do.search_for_simmilar_ver_2()
         self.left_list.delete(0, END)
         self.right_list.delete(0, END)
-        for x in list_of_songs:
-            temp = x.split(',', 1)
+        for song in list_of_songs:
+            temp = song.split(',', 1)
             self.insert_to_right_list_box(temp[0], temp[1])
         for key, value in shared_items_add.items():
             temp = key.split(',', 1)
+            self.queue.put(temp[0] + " : " + value)
             self.insert_to_left_list_box(temp[0] + " : " + value)
 
     def open_menu_ver_2(self):
@@ -96,19 +111,26 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         list_of_songs = []
         self.config(cursor="wait")
         self.update()
+
+        self.queue.put("Finding files in chosen folder:\n\n")
+        num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
+        threading.Thread(target=self.run, args=(num_files,)).start()
         for data in os.walk(dir_name):
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
+                self.queue.put(filename)
+        self.queue.put("\nAnd what we have here?:\n")
         self.config(cursor="")
-        shared_items_add = self.alg_do.search_for_simmilar_ver_1()
+        shared_items_add = self.alg_do.search_for_simmilar_ver_1(self.queue)
         self.left_list.delete(0, END)
         self.right_list.delete(0, END)
-        for x in list_of_songs:
-            temp = x.split(',', 1)
+        for song in list_of_songs:
+            temp = song.split(',', 1)
             self.insert_to_right_list_box(temp[0], temp[1])
         for key, value in shared_items_add.items():
             temp = key.split(',', 1)
             self.insert_to_left_list_box(temp[0] + " : " + value)
+        self.queue.put("endino-tarantino")
 
     def open_menu_ver_3(self):
         """select directory with music, alg 3"""
@@ -124,8 +146,8 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         shared_items_add = self.alg_do.search_for_simmilar_ver_3()
         self.left_list.delete(0, END)
         self.right_list.delete(0, END)
-        for x in list_of_songs:
-            temp = x.split(',', 1)
+        for song in list_of_songs:
+            temp = song.split(',', 1)
             self.insert_to_right_list_box(temp[0], temp[1])
         for key, value in shared_items_add.items():
             temp = key.split(',', 1)
@@ -153,3 +175,53 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         value = widget.get(selection[0])
         url = self.alg_do.youtube_search(value)
         webbrowser.open(url, new=new)
+
+    def run(self, number):
+        try:
+            app = App(self.queue, number)
+            app.mainloop()
+        except:
+            print("ps")
+
+
+import tkinter as tk
+import threading
+import queue
+
+class App(tk.Tk):
+
+    def __init__(self, queue1, number):
+        self.root = tk.Tk
+        self.root.__init__(self)
+        self.queue = queue1
+        self.number = number
+        self.listbox = tk.Listbox(self, width=50, height=20)
+        self.progressbar = ttk.Progressbar(self, orient='horizontal',
+                                           length=400, mode='determinate')
+        self.listbox.pack(padx=10, pady=10)
+        self.progressbar.pack(padx=10, pady=10)
+        self.running = 1
+        self.periodiccall()
+
+    def periodiccall(self):
+        self.checkqueue()
+        if self.running:
+            self.after(100, self.periodiccall)
+        else:
+            self.root.destroy(self)
+
+    def checkqueue(self):
+        while self.queue.qsize():
+            try:
+                msg = self.queue.get(0)
+                self.listbox.insert('end', msg)
+                self.listbox.yview(END)
+                self.progressbar.step(math.floor(100/(self.number +17)))
+                if msg == "endino-tarantino":#crazy name so noone will ever have file named like this
+                    self.running = 0
+            except queue.Empty:
+                #killing thread
+                self.running = 0
+                self.root.destroy()
+
+
