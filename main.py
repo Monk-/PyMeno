@@ -1,23 +1,32 @@
 """main class"""
 from tkinter import Tk
 
-from GUI_DIR.gui import GUI
-from CORE.creatin_database import CreatingDatabase
-from CORE.algh import FindMusic
-from CORE.check_paths import MakeBagOfWords
+from GUI_DIR import GUI
+from CORE import MakeBagOfWords, FindMusic, CreatingDatabase
 
 
-class PyGame(object):
-
+class PyMeno(object):
+    """runs app"""
     def __init__(self):
         """create gui"""
-        root = Tk()
-        root.geometry("800x400+300+300")
-        db = CreatingDatabase()
-        check = MakeBagOfWords()
-        alg = FindMusic(check.MY_BAG, check.MY_BAG_C)
+        self.root = Tk()
+        self.root.geometry("800x400+300+300")
+        self.db_parser = CreatingDatabase()
+        self.check = MakeBagOfWords()
+        self.alg = FindMusic(self.check.my_bag, self.check.my_bag_c)
+        self.say_credit()
+        self.run_app()
 
-        GUI(root, db, check, alg)
-        root.mainloop()
+    def run_app(self):
+        """run method"""
+        GUI(self.root, self.db_parser, self.check, self.alg)
+        self.root.mainloop()
 
-PyGame()
+    @staticmethod
+    def say_credit():
+        """credits"""
+        print("Authors:")
+        print("Klaudia Olejniczak")
+        print("Oleksandr Kuzhel")
+
+PyMeno()
