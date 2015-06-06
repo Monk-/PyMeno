@@ -41,7 +41,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         # add something to menu
 
         file_menu.add_command(label="Choose folder with music ALG 1",
-                              underline=0, command=self.open_menu_ver_2)
+                              underline=0, command=self.new_thread_2)
         file_menu.add_command(label="Choose folder with music ALG 2",
                               underline=0, command=self.open_menu)
         file_menu.add_command(label="Choose folder with music ALG 3",
@@ -59,7 +59,6 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
 
         menu_bar.add_cascade(label="File", underline=0, menu=file_menu)
         menu_bar.add_cascade(label="Data", underline=0, menu=menu2_parse)
-
         """sub_menu = Menu(menu_bar, tearoff=False)
         sub_menu.add_command(label="Video")
         sub_menu.add_command(label="Channel")
@@ -104,17 +103,27 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             self.queue.put(temp[0] + " : " + value)
             self.insert_to_left_list_box(temp[0] + " : " + value)
 
-    def open_menu_ver_2(self):
-        """select directory with music, alg 2"""
+    def new_thread_2(self):
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
-        list_of_songs = []
+
         self.config(cursor="wait")
         self.update()
 
         self.queue.put("Finding files in chosen folder:\n\n")
         num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
-        threading.Thread(target=self.run, args=(num_files,)).start()
+        rott = tk.Tk()
+        app = App(rott, self.queue, num_files)
+        rott.protocol("WM_DELETE_WINDOW", app.on_closing)
+        threading.Thread(target=self.open_menu_ver_2, args=(dir_name,)).start()
+        app.mainloop()
+        app.destroy()
+        app.quit()
+
+    def open_menu_ver_2(self, dir_name):
+        """select directory with music, alg 2"""
+        list_of_songs = []
+        self.path_and_bag.clear_bag_of_words()
         for data in os.walk(dir_name):
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
@@ -188,27 +197,41 @@ import tkinter as tk
 import threading
 import queue
 
-class App(tk.Tk):
+class App(Frame):
 
-    def __init__(self, queue1, number):
-        self.root = tk.Tk
-        self.root.__init__(self)
+    def __init__(self, master, queue1, number):
+        Frame.__init__(self,master)
+        self.root = master
+        self.root.title("Please, bear with me, for a moment : )")
         self.queue = queue1
         self.number = number
-        self.listbox = tk.Listbox(self, width=50, height=20)
-        self.progressbar = ttk.Progressbar(self, orient='horizontal',
+        self.listbox = tk.Listbox(self.root, width=50, height=20)
+        self.progressbar = ttk.Progressbar(self.root, orient='horizontal',
                                            length=400, mode='determinate')
         self.listbox.pack(padx=10, pady=10)
         self.progressbar.pack(padx=10, pady=10)
         self.running = 1
         self.periodiccall()
+        self._job = 0
 
     def periodiccall(self):
         self.checkqueue()
         if self.running:
-            self.after(100, self.periodiccall)
+            self._job = self.after(100, self.periodiccall)
         else:
-            self.root.destroy(self)
+            self.after_cancel(self._job)
+            self._job = None
+            self.root.destroy()
+            self.root.quit()
+            print("ASas")
+
+    def on_closing(self):
+        self.after_cancel(self._job)
+        self._job = None
+        self.listbox.destroy()
+        self.progressbar.destroy()
+        #self.root.destroy(self)
+        #self.root.quit(self)
 
     def checkqueue(self):
         while self.queue.qsize():
@@ -216,7 +239,7 @@ class App(tk.Tk):
                 msg = self.queue.get(0)
                 self.listbox.insert('end', msg)
                 self.listbox.yview(END)
-                self.progressbar.step(math.floor(100/(self.number +17)))
+                self.progressbar.step(100/(self.number + 30))
                 if msg == "endino-tarantino":#crazy name so noone will ever have file named like this
                     self.running = 0
             except queue.Empty:
