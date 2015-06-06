@@ -85,50 +85,48 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         """select directory with music, alg 1"""
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
-        if dir_name != "":
-            self.config(cursor="wait")
-            self.update()
-            list_of_songs = []
-            for data in os.walk(dir_name):
-                for filename in data[2]:
-                    list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
-            self.config(cursor="")
-            shared_items_add = self.alg_do.search_for_simmilar_ver_2()
-            self.left_list.delete(0, END)
-            self.right_list.delete(0, END)
-            for song in list_of_songs:
-                temp = song.split(',', 1)
-                self.insert_to_right_list_box(temp[0], temp[1])
-            for key, value in shared_items_add.items():
-                temp = key.split(',', 1)
-                self.queue.put(temp[0] + " : " + value)
-                self.insert_to_left_list_box(temp[0] + " : " + value)
-        else:
-            print("Action aborted")
+        self.config(cursor="wait")
+        self.update()
+        list_of_songs = []
+        for data in os.walk(dir_name):
+            for filename in data[2]:
+                list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
+        self.config(cursor="")
+        shared_items_add = self.alg_do.search_for_simmilar_ver_2()
+        self.left_list.delete(0, END)
+        self.right_list.delete(0, END)
+        for song in list_of_songs:
+            temp = song.split(',', 1)
+            self.insert_to_right_list_box(temp[0], temp[1])
+        for key, value in shared_items_add.items():
+            temp = key.split(',', 1)
+            self.queue.put(temp[0] + " : " + value)
+            self.insert_to_left_list_box(temp[0] + " : " + value)
 
     def new_thread_2(self):
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
 
-        if dir_name != "":
-            self.config(cursor="wait")
-            self.update()
-            self.path_and_bag.check_if_refresh(dir_name)
-            self.queue.put("Finding files in chosen folder:\n\n")
-            num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
-            rott = tk.Tk()
-            app = App(rott, self.queue, num_files)
-            rott.protocol("WM_DELETE_WINDOW", app.on_closing)
-            threading.Thread(target=self.open_menu_ver_2, args=(dir_name,)).start()
-            app.mainloop()
-            app.destroy()
-            app.quit()
-        else:
-            print("Action aborted")
+        self.config(cursor="wait")
+        self.update()
+        self.clean_queue()
+        self.queue.put("Finding files in chosen folder:\n\n")
+        num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
+        rott = tk.Tk()
+        app = App(rott, self.queue, num_files)
+        rott.protocol("WM_DELETE_WINDOW", app.on_closing)
+        threading.Thread(target=self.open_menu_ver_2, args=(dir_name,)).start()
+        app.mainloop()
+
+    def clean_queue(self):
+        if not self.queue.empty():
+            while not self.queue.empty():
+                self.queue.get()
 
     def open_menu_ver_2(self, dir_name):
         """select directory with music, alg 2"""
         list_of_songs = []
+        self.path_and_bag.clear_bag_of_words()
         for data in os.walk(dir_name):
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
@@ -148,29 +146,24 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
 
     def open_menu_ver_3(self):
         """select directory with music, alg 3"""
-
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
-        if dir_name != "":
-            list_of_songs = []
-            self.config(cursor="wait")
-            self.update()
-
-            for data in os.walk(dir_name):
-                for filename in data[2]:
-                    list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
-            self.config(cursor="")
-            shared_items_add = self.alg_do.search_for_simmilar_ver_3()
-            self.left_list.delete(0, END)
-            self.right_list.delete(0, END)
-            for song in list_of_songs:
-                temp = song.split(',', 1)
-                self.insert_to_right_list_box(temp[0], temp[1])
-            for key, value in shared_items_add.items():
-                temp = key.split(',', 1)
-                self.insert_to_left_list_box(temp[0] + " : " + value)
-        else:
-            print("Action aborted")
+        list_of_songs = []
+        self.config(cursor="wait")
+        self.update()
+        for data in os.walk(dir_name):
+            for filename in data[2]:
+                list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
+        self.config(cursor="")
+        shared_items_add = self.alg_do.search_for_simmilar_ver_3()
+        self.left_list.delete(0, END)
+        self.right_list.delete(0, END)
+        for song in list_of_songs:
+            temp = song.split(',', 1)
+            self.insert_to_right_list_box(temp[0], temp[1])
+        for key, value in shared_items_add.items():
+            temp = key.split(',', 1)
+            self.insert_to_left_list_box(temp[0] + " : " + value)
 
     def insert_to_right_list_box(self, artist, song):
         """insert to right listbox for other methods"""
@@ -220,9 +213,10 @@ class App(Frame):
                                            length=400, mode='determinate')
         self.listbox.pack(padx=10, pady=10)
         self.progressbar.pack(padx=10, pady=10)
+        self.listbox.delete(0, END)
         self.running = 1
-        self.periodiccall()
         self._job = 0
+        self.periodiccall()
 
     def periodiccall(self):
         self.checkqueue()
@@ -236,12 +230,12 @@ class App(Frame):
             print("ASas")
 
     def on_closing(self):
-        self.after_cancel(self._job)
-        self._job = None
         self.listbox.destroy()
         self.progressbar.destroy()
-        #self.root.destroy(self)
-        #self.root.quit(self)
+        self.root.destroy()
+        self.root.quit()
+        self.after_cancel(self._job)
+        self._job = None
 
     def checkqueue(self):
         while self.queue.qsize():
