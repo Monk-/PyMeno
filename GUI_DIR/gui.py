@@ -107,16 +107,20 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
 
-        self.config(cursor="wait")
-        self.update()
-        self.clean_queue()
-        self.queue.put("Finding files in chosen folder:\n\n")
-        num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
-        rott = tk.Tk()
-        app = App(rott, self.queue, num_files)
-        rott.protocol("WM_DELETE_WINDOW", app.on_closing)
-        threading.Thread(target=self.open_menu_ver_2, args=(dir_name,)).start()
-        app.mainloop()
+        if dir_name != "":
+            self.path_and_bag.check_if_refresh(dir_name)
+            self.config(cursor="wait")
+            self.update()
+            self.clean_queue()
+            self.queue.put("Finding files in chosen folder:\n\n")
+            num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
+            rott = tk.Tk()
+            app = App(rott, self.queue, num_files)
+            rott.protocol("WM_DELETE_WINDOW", app.on_closing)
+            threading.Thread(target=self.open_menu_ver_2, args=(dir_name,)).start()
+            app.mainloop()
+        else:
+            print("Action aborted")
 
     def clean_queue(self):
         if not self.queue.empty():
