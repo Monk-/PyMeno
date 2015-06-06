@@ -11,15 +11,21 @@ from nltk.stem.wordnet import WordNetLemmatizer
 
 
 class MakeBagOfWords(object):
+    """
+        This class searches user's library and turns lyrics into dicts
+    """
 
     def __init__(self):
+        """
+            init
+        """
         # Important to not put the same values into users library again
-        self.LIST_ARTIST_SONGS = []
+        self.list_artist_songs = []
         # Dict of words per artist
-        self.MY_BAG = {}
+        self.my_bag = {}
         # Dict of songs per artist
         # Its have to be that way because user doesnt has to have all album
-        self.MY_BAG_C = {}
+        self.my_bag_c = {}
         self.last_path = ""
 
     def check_if_refresh(self, path):
@@ -40,16 +46,16 @@ class MakeBagOfWords(object):
             artist = audio['TPE1'].text[0]
             title = audio["TIT2"].text[0]
             label = artist + "," + title
-            if label not in self.LIST_ARTIST_SONGS:
+            if label not in self.list_artist_songs:
                 # self.insert_to_right_list_box(artist, title)
                 self.bag_of_words(artist, title)
-                self.LIST_ARTIST_SONGS.append(label)
+                self.list_artist_songs.append(label)
             else:
                 # If was
                 print("That was already parsed", " : \n", label)
         except ValueError:
             print("ERROR / Cannot read the file")
-        return self.LIST_ARTIST_SONGS
+        return self.list_artist_songs
 
     def bag_of_words(self, artist_name, song_name):
         """
@@ -63,17 +69,20 @@ class MakeBagOfWords(object):
         song = [re.sub(r'[^A-Za-z0-9]+', '', word) for word in song]
         song = [to_simpler_form.lemmatize(word, 'v') for word in song]
         cnt = Counter(song)
-        if artist_name not in self.MY_BAG:
+        if artist_name not in self.my_bag:
             print("Parsing author : ", artist_name, " : Please wait... : )")
-            self.MY_BAG[artist_name] = cnt
-            self.MY_BAG_C[artist_name] = 1
+            self.my_bag[artist_name] = cnt
+            self.my_bag_c[artist_name] = 1
         else:
-            self.MY_BAG[artist_name] = self.MY_BAG[artist_name] + cnt
-            self.MY_BAG_C[artist_name] += 1
+            self.my_bag[artist_name] = self.my_bag[artist_name] + cnt
+            self.my_bag_c[artist_name] += 1
 
     def clear_bag_of_words(self):
-        self.LIST_ARTIST_SONGS.clear()
-        self.MY_BAG.clear()
+        """
+            This function clears dicts
+        """
+        self.list_artist_songs.clear()
+        self.my_bag.clear()
         # Dict of songs per artist
         # Its have to be that way because user doesnt has to have all album
-        self.MY_BAG_C.clear()
+        self.my_bag_c.clear()

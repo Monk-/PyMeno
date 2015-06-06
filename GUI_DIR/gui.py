@@ -7,6 +7,7 @@ import webbrowser
 import argparse
 from googleapiclient.discovery import build
 
+
 class GUI(Frame):  # pylint: disable=too-many-ancestors
     """class for GUI"""
 
@@ -50,9 +51,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         menu2_parse.\
             add_command(label="Parse artists information to database", underline=0,
                         command=self.go_to_lilis_parsing)
-        menu2_parse.add_command(label="Show", underline=0, command=self.show_stats)
-        menu2_parse.add_command(label="Show by album", underline=0,
-                                command=self.show_stats_by_album)
+
 
         menu_bar.add_cascade(label="File", underline=0, menu=file_menu)
         menu_bar.add_cascade(label="Data", underline=0, menu=menu2_parse)
@@ -61,18 +60,6 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         sub_menu.add_command(label="Channel")
         sub_menu.add_command(label="Playlist")
         menu2_parse.add_cascade(label='Youtube search', menu=sub_menu, underline=0)"""
-
-    @staticmethod
-    def show_stats():
-        """show stats in listbox"""
-        pass
-        # datMan.get_music_stats(self)
-
-    @staticmethod
-    def show_stats_by_album():
-        """show stats by album in listbox"""
-        pass
-        # datMan.get_music_stats_by_album(self)
 
     def on_exit(self):
         """quit"""
@@ -243,6 +230,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
 import tkinter as tk
 import threading
 import queue
+
 
 class App(Frame):
 
