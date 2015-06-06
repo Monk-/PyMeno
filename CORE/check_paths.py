@@ -11,36 +11,19 @@ from nltk.stem.wordnet import WordNetLemmatizer
 
 
 class MakeBagOfWords(object):
-    # Important to not put the same values into users library again
-    LIST_ARTIST_SONGS = []
-    # Dict of words per artist
-    MY_BAG = {}
-    # Dict of songs per artist
-    # Its have to be that way because user doesnt has to have all album
-    MY_BAG_C = {}
+
+
+
 
     def __init__(self):
+        # Important to not put the same values into users library again
+        self.LIST_ARTIST_SONGS = []
+         # Dict of words per artist
+        self.MY_BAG = {}
+        # Dict of songs per artist
+        # Its have to be that way because user doesnt has to have all album
+        self.MY_BAG_C = {}
         pass
-
-    def bag_of_words(self, artist_name, song_name):
-        """
-            Simple bag of words
-            We used here a lemmatize to simplify form of words for example running -> run
-            And stopwords to remove them from dict
-        """
-        to_simpler_form = WordNetLemmatizer()
-        song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
-        song = [word for word in song if word not in stopwords.words('english')]
-        song = [re.sub(r'[^A-Za-z0-9]+', '', word) for word in song]
-        song = [to_simpler_form.lemmatize(word, 'v') for word in song]
-        cnt = Counter(song)
-        if artist_name not in self.MY_BAG:
-            print("Parsing author : ", artist_name, " : Please wait... : )")
-            self.MY_BAG[artist_name] = cnt
-            self.MY_BAG_C[artist_name] = 1
-        else:
-            self.MY_BAG[artist_name] = self.MY_BAG[artist_name] + cnt
-            self.MY_BAG_C[artist_name] += 1
 
     def change_title(self, path_to_file):
         """
@@ -63,4 +46,29 @@ class MakeBagOfWords(object):
             print("ERROR / Cannot read the file")
         return self.LIST_ARTIST_SONGS
 
+    def bag_of_words(self, artist_name, song_name):
+        """
+            Simple bag of words
+            We used here a lemmatize to simplify form of words for example running -> run
+            And stopwords to remove them from dict
+        """
+        to_simpler_form = WordNetLemmatizer()
+        song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+        song = [word for word in song if word not in stopwords.words('english')]
+        song = [re.sub(r'[^A-Za-z0-9]+', '', word) for word in song]
+        song = [to_simpler_form.lemmatize(word, 'v') for word in song]
+        cnt = Counter(song)
+        if artist_name not in self.MY_BAG:
+            print("Parsing author : ", artist_name, " : Please wait... : )")
+            self.MY_BAG[artist_name] = cnt
+            self.MY_BAG_C[artist_name] = 1
+        else:
+            self.MY_BAG[artist_name] = self.MY_BAG[artist_name] + cnt
+            self.MY_BAG_C[artist_name] += 1
 
+    def clear_bag_of_words(self):
+        self.LIST_ARTIST_SONGS.clear()
+        self.MY_BAG.clear()
+        # Dict of songs per artist
+        # Its have to be that way because user doesnt has to have all album
+        self.MY_BAG_C.clear()
