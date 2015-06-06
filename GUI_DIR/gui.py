@@ -275,7 +275,7 @@ import queue
 class App(Frame):
 
     def __init__(self, master, queue1, number):
-        Frame.__init__(self,master)
+        Frame.__init__(self, master)
         self.root = master
         self.root.title("Please, bear with me, for a moment : )")
         self.queue = queue1

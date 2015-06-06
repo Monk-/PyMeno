@@ -23,6 +23,9 @@ class CreatingDatabase(object):
         self.dictionary_for_artist = {}
         self.list_of_average = {}
         self.list_of_average_per_artist = {}
+        self.calc_number_of_songs = 0
+        self.calc_number_of_songs_per_album = 0
+        self.label = ""
 
     @staticmethod
     def download_list_of_artists():
@@ -54,6 +57,9 @@ class CreatingDatabase(object):
         self.list_of_average_per_artist.clear()
         self.dictionary_per_album.clear()
         self.reads_dicts()
+        self.calc_number_of_songs = 0
+        self.calc_number_of_songs_per_album = 0
+        self.label = ""
 
     def reads_dicts(self):
         """
@@ -72,7 +78,6 @@ class CreatingDatabase(object):
         if number_of < 0 or number_of > 1000:
             number_of = 200
         root = ET.parse('DATA/scrobble.xml').getroot()
-        label = ""
         if number_from != 0:
             self.refresh_dicts()
         counter = 0
@@ -81,7 +86,7 @@ class CreatingDatabase(object):
                 counter += 1
             else:
                 current_artist = ""
-                calc_number_of_songs = 0
+                self.calc_number_of_songs = 0
                 counter += 1
                 if counter > number_of:
                     break
@@ -90,44 +95,18 @@ class CreatingDatabase(object):
                 try:
                     for album in PyLyrics.getAlbums(author.text):
                         # going to tracks in album
-                        calc_number_of_songs_per_album = 0
+                        self.calc_number_of_songs_per_album = 0
                         try:
                             print("ALBUM", author.text, " : ", album.name, " Parsing... ")
                             for track in PyLyrics.getTracks(album):
                                 # going to lyric in song
-                                try:
-                                    current_artist = track.artist
-                                    label = current_artist + "," + album.name
-                                    print(track.artist, " : ", album.name, " : ", track.name, " : ")
-                                    # operation on lyrics
-                                    song = self.do_the_dicts(current_artist, track.name)
-                                    # Counting songs per artist
-                                    calc_number_of_songs += 1
-                                    calc_number_of_songs_per_album += 1
-                                    # Counting words per album
-                                    self.dict_per_album(label, song)
-                                    # Counting words per artist
-                                    self.dict_for_artist(current_artist, song)
-                                except ValueError:
-                                    print(" ERROR / There is no such song in PyLyrics")
-
-                            if label in self.dictionary_per_album:
-                                print("Per album " + album.name + " : ",
-                                      self.dictionary_per_album[label])
-                                self.list_of_average[label] = \
-                                    sum(self.dictionary_per_album[label].values())\
-                                    / calc_number_of_songs_per_album
-                                self.list_of_average_per_artist[current_artist] = \
-                                    sum(self.dictionary_for_artist[current_artist]
-                                        .values())/calc_number_of_songs
-                                self.__log_info(self.list_of_average[label],
-                                              self.list_of_average_per_artist[current_artist])
-
+                                self.operation_per_song(track, album)
                         except (ValueError, UnboundLocalError):
                             print("MEGA ERROR / There is no such album in PyLyrics")
                     if current_artist in self.dictionary_for_artist:
                         print("Artist : ",
-                              current_artist, "\nAll : ", self.dictionary_for_artist[current_artist])
+                              current_artist, "\nAll : ",
+                              self.dictionary_for_artist[current_artist])
                 except ValueError:
                     print("Connection problem / There is no such artist in PyLyrics")
         self.put_into_pickles(number_of)
@@ -145,6 +124,45 @@ class CreatingDatabase(object):
         with open("DATA/pickleLilFromArtistWordPerSong" + ".pkl", 'wb') as file:
             pickle.dump(self.list_of_average_per_artist, file)
         self.check()
+
+    def calculate_average(self, current_artist, album_name,
+                          calc_number_of_songs_per_album, calc_number_of_songs):
+        """
+            This method calculates average
+        """
+        if self.label in self.dictionary_per_album:
+            print("Per album " + album_name + " : ", self.dictionary_per_album[self.label])
+            self.list_of_average[self.label] = \
+                sum(self.dictionary_per_album[self.label].values())/calc_number_of_songs_per_album
+            self.list_of_average_per_artist[current_artist] = \
+                sum(self.dictionary_for_artist[current_artist].values())/calc_number_of_songs
+            self.__log_info(self.list_of_average[self.label],
+                            self.list_of_average_per_artist[current_artist])
+
+    def operation_per_song(self, track, album):
+        """
+            This method makes operation on song
+        """
+        try:
+            current_artist = track.artist
+            self.label = current_artist + "," + album.name
+            print(track.artist, " : ", album.name, " : ", track.name, " : ")
+            # operation on lyrics
+            song = self.do_the_dicts(current_artist, track.name)
+            # Counting songs per artist
+            self.calc_number_of_songs += 1
+            self.calc_number_of_songs_per_album += 1
+            # Counting words per album
+            self.dict_per_album(song)
+            # Counting words per artist
+            self.dict_for_artist(current_artist, song)
+        except ValueError:
+            print(" ERROR / There is no such song in PyLyrics")
+
+        self.calculate_average(current_artist,
+                               album.name,
+                               self.calc_number_of_songs_per_album,
+                               self.calc_number_of_songs)
 
     @staticmethod
     def check():
@@ -165,14 +183,15 @@ class CreatingDatabase(object):
                 Counter(self.dictionary_for_artist[current_artist]) + Counter(song)
         return self.dictionary_for_artist
 
-    def dict_per_album(self, label, song):
+    def dict_per_album(self, song):
         """
             This function is putting counter into dicts with label of "current_artist,album"
         """
-        if label not in self.dictionary_per_album:
-            self.dictionary_per_album[label] = Counter(song)
+        if self.label not in self.dictionary_per_album:
+            self.dictionary_per_album[self.label] = Counter(song)
         else:
-            self.dictionary_per_album[label] = self.dictionary_per_album[label] + Counter(song)
+            self.dictionary_per_album[self.label] = \
+                self.dictionary_per_album[self.label] + Counter(song)
 
     @staticmethod
     def __log_info(info1, info2):
