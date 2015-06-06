@@ -109,7 +109,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
 
         self.config(cursor="wait")
         self.update()
-
+        self.clean_queue()
         self.queue.put("Finding files in chosen folder:\n\n")
         num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
         rott = tk.Tk()
@@ -117,8 +117,11 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         rott.protocol("WM_DELETE_WINDOW", app.on_closing)
         threading.Thread(target=self.open_menu_ver_2, args=(dir_name,)).start()
         app.mainloop()
-        app.destroy()
-        app.quit()
+
+    def clean_queue(self):
+        if not self.queue.empty():
+            while not self.queue.empty():
+                self.queue.get()
 
     def open_menu_ver_2(self, dir_name):
         """select directory with music, alg 2"""
@@ -210,9 +213,10 @@ class App(Frame):
                                            length=400, mode='determinate')
         self.listbox.pack(padx=10, pady=10)
         self.progressbar.pack(padx=10, pady=10)
+        self.listbox.delete(0, END)
         self.running = 1
-        self.periodiccall()
         self._job = 0
+        self.periodiccall()
 
     def periodiccall(self):
         self.checkqueue()
@@ -226,12 +230,12 @@ class App(Frame):
             print("ASas")
 
     def on_closing(self):
-        self.after_cancel(self._job)
-        self._job = None
         self.listbox.destroy()
         self.progressbar.destroy()
-        #self.root.destroy(self)
-        #self.root.quit(self)
+        self.root.destroy()
+        self.root.quit()
+        self.after_cancel(self._job)
+        self._job = None
 
     def checkqueue(self):
         while self.queue.qsize():
