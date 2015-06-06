@@ -8,30 +8,32 @@ import pickle
 import math
 import random
 import argparse
-import queue
 from googleapiclient.discovery import build
 
 
 class FindMusic(object):
-    # YouTube API
-    DEVELOPER_KEY = "AIzaSyCn9Pk4vWC8LjjIKqol5gkku20DI0IRurU"
-    YOUTUBE_API_SERVICE_NAME = "youtube"
-    YOUTUBE_API_VERSION = "v3"
-    # There we have a dict of average of word per song for each artist
-    AVERAGE_WORD_PER_SONG_PER_ARTIST = {}
-    # There we have a dict of average of word per song for all music user's library
-    AVERAGE_WORD_PER_SONG = 0
-    # Important to not put the same values into users library again
-    LIST_ARTIST_SONGS = []
-    # kind of temporary
-    CATALOG = Counter()
-
-    MY_BAG = {}
-    # Dict of songs per artist
-    # Its have to be that way because user doesnt has to have all album
-    MY_BAG_C = {}
+    """
+        FindMusic class is looking for similar music to user's library
+    """
 
     def __init__(self, my_bag, my_bag_c):
+        """
+            init
+        """
+        # YouTube API
+        self.DEVELOPER_KEY = "AIzaSyCn9Pk4vWC8LjjIKqol5gkku20DI0IRurU"
+        self.YOUTUBE_API_SERVICE_NAME = "youtube"
+        self.YOUTUBE_API_VERSION = "v3"
+
+        # There we have a dict of average of word per song for each artist
+        self.AVERAGE_WORD_PER_SONG_PER_ARTIST = {}
+        # There we have a dict of average of word per song for all music user's library
+        self.AVERAGE_WORD_PER_SONG = 0
+        # Important to not put the same values into users library again
+        self.LIST_ARTIST_SONGS = []
+        # kind of temporary
+        self.CATALOG = Counter()
+
         self.MY_BAG = my_bag
         self.MY_BAG_C = my_bag_c
 

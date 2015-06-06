@@ -12,18 +12,23 @@ from nltk.stem.wordnet import WordNetLemmatizer
 
 class MakeBagOfWords(object):
 
-
-
-
     def __init__(self):
         # Important to not put the same values into users library again
         self.LIST_ARTIST_SONGS = []
-         # Dict of words per artist
+        # Dict of words per artist
         self.MY_BAG = {}
         # Dict of songs per artist
         # Its have to be that way because user doesnt has to have all album
         self.MY_BAG_C = {}
-        pass
+        self.last_path = ""
+
+    def check_if_refresh(self, path):
+        """
+            This function checks if values need to be erased
+        """
+        if self.last_path != path:
+            self.last_path = path
+            self.clear_bag_of_words()
 
     def change_title(self, path_to_file):
         """
