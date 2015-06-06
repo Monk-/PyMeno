@@ -1,13 +1,10 @@
 """gui and gui methods"""
-import glob
-import threading
-from tkinter import Frame, Listbox, Menu, LEFT, RIGHT, BOTH, END, filedialog, simpledialog
-from tkinter import ttk
-import os
+from tkinter import Frame, Listbox, Menu, LEFT, RIGHT, BOTH, END, filedialog, simpledialog, ttk
+import tkinter as tk
 import webbrowser
-import time
-from os.path import isfile
-import math
+import threading
+import queue
+import os
 
 
 class GUI(Frame):  # pylint: disable=too-many-ancestors
@@ -163,9 +160,23 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
 
     def go_to_lilis_parsing(self):
         """how many artist do you want to parse"""
-        number = int(simpledialog.askstring('Number', 'How many artists?'))
-        print(number)
-        self.db_creator.parse_file_lil_version(number)
+
+        number_from = simpledialog.askstring('Number', 'How many artists?/FROM')
+        try:
+            if number_from is not None:
+                number_from = int(number_from)
+                print(number_from)
+            number = simpledialog.askstring('Number', 'How many artists?/TO')
+            if number is not None:
+                number = int(number)
+                print(number)
+
+            if number and number_from is not None:
+                self.db_creator.parse_file_lil_version(number, number_from)
+            else:
+                print("Action aborted")
+        except ValueError:
+            print("Action aborted")
 
     def on_double_click(self, event):
         """open youtube on double click"""
@@ -180,22 +191,21 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         try:
             app = App(self.queue, number)
             app.mainloop()
-        except:
+        except ValueError:
             print("ps")
 
 
-import tkinter as tk
-import threading
-import queue
-
 class App(tk.Tk):
+    """class witch open additional window with progress bar"""
 
     def __init__(self, queue1, number):
+        """init"""
         self.root = tk.Tk
         self.root.__init__(self)
         self.queue = queue1
         self.number = number
-        self.listbox = tk.Listbox(self, width=50, height=20)
+        self.title("Please, bear with me, for a moment : )")
+        self.listbox = tk.Listbox(self, width=60, height=20)
         self.progressbar = ttk.Progressbar(self, orient='horizontal',
                                            length=400, mode='determinate')
         self.listbox.pack(padx=10, pady=10)
@@ -204,6 +214,7 @@ class App(tk.Tk):
         self.periodiccall()
 
     def periodiccall(self):
+        """call"""
         self.checkqueue()
         if self.running:
             self.after(100, self.periodiccall)
@@ -211,17 +222,17 @@ class App(tk.Tk):
             self.root.destroy(self)
 
     def checkqueue(self):
+        """checking the queue"""
         while self.queue.qsize():
             try:
                 msg = self.queue.get(0)
                 self.listbox.insert('end', msg)
                 self.listbox.yview(END)
-                self.progressbar.step(math.floor(100/(self.number +17)))
-                if msg == "endino-tarantino":#crazy name so noone will ever have file named like this
+                self.progressbar.step(100/(self.number + 17))
+                if msg == "endino-tarantino":
+                    # crazy name so noone will ever have file named like this
                     self.running = 0
             except queue.Empty:
-                #killing thread
+                # killing thread
                 self.running = 0
-                self.root.destroy()
-
-
+                self.root.destroy(self)

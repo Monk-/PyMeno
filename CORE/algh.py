@@ -153,6 +153,7 @@ class FindMusic(object):
         data_from_pickle = pickle.load(open("DATA/pickleLil300.pkl", 'rb'))
         data_from_pickle.update(pickle.load(open("DATA/pickleLil500.pkl", 'rb')))
         data_from_pickle.update(pickle.load(open("DATA/pickleLil303.pkl", 'rb')))
+        data_from_pickle.update(pickle.load(open("DATA/pickleLil600.pkl", 'rb')))
         for key, value in self.MY_BAG.items():
             shared_items_album.clear()
             for key_lib, value_lib in data_from_pickle.items():
@@ -177,6 +178,7 @@ class FindMusic(object):
         data_from_pickle = pickle.load(open("DATA/pickleLil300.pkl", 'rb'))
         data_from_pickle.update(pickle.load(open("DATA/pickleLil500.pkl", 'rb')))
         data_from_pickle.update(pickle.load(open("DATA/pickleLil303.pkl", 'rb')))
+        data_from_pickle.update(pickle.load(open("DATA/pickleLil600.pkl", 'rb')))
         # We need to pick up some date from pickle
         # with dicts of words from each album of artist
         for key, value in data_from_pickle.items():
