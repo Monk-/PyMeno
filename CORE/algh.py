@@ -31,7 +31,7 @@ class FindMusic(object):
         self.my_bag = my_bag_a
         self.my_bag_c = my_bag_ca
 
-    def search_for_simmilar_ver_2(self):
+    def search_for_simmilar_ver_2(self, queue):
         """
             # Algorithm II #
             We parts our code to have more visibility of what we doing
@@ -45,7 +45,7 @@ class FindMusic(object):
         self.first_step()
         temp = self.second_step_ver1(temp, my_bag_all)
         temp = self.fourth_step(temp, my_bag_all)
-        temp = self.fifth_step(temp)
+        temp = self.fifth_step(temp, queue)
         return temp
 
     def search_for_simmilar_ver_1(self, queues):
@@ -63,14 +63,14 @@ class FindMusic(object):
         temp = self.fifth_step(temp, queues)
         return temp
 
-    def search_for_simmilar_ver_3(self):
+    def search_for_simmilar_ver_3(self, queue):
         """
             # Algorithm III #
         """
         temp = self.made_group_smaller()
         self.first_step()
         temp = self.second_step_ver3(temp)
-        temp = self.fifth_step(temp)
+        temp = self.fifth_step(temp, queue)
         return temp
 
     def made_group_smaller(self):

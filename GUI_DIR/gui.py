@@ -40,9 +40,9 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         file_menu.add_command(label="Choose folder with music ALG 1",
                               underline=0, command=self.new_thread_2)
         file_menu.add_command(label="Choose folder with music ALG 2",
-                              underline=0, command=self.open_menu)
+                              underline=0, command=self.new_thread_1)
         file_menu.add_command(label="Choose folder with music ALG 3",
-                              underline=0, command=self.open_menu_ver_3)
+                              underline=0, command=self.new_thread_2)
         file_menu.add_command(label="Exit", underline=0, command=self.on_exit)
 
         menu2_parse.add_command(label="Download artists list", underline=0,
@@ -78,18 +78,36 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         """quit"""
         self.quit()
 
-    def open_menu(self):
-        """select directory with music, alg 1"""
+    def new_thread_1(self):
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
-        self.config(cursor="wait")
-        self.update()
+
+        if dir_name != "":
+            self.path_and_bag.check_if_refresh(dir_name)
+            self.config(cursor="wait")
+            self.update()
+            self.clean_queue()
+            self.queue.put("Finding files in chosen folder:\n\n")
+            num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
+            rott = tk.Tk()
+            app = App(rott, self.queue, num_files)
+            rott.protocol("WM_DELETE_WINDOW", app.on_closing)
+            threading.Thread(target=self.open_menu, args=(dir_name,)).start()
+            app.mainloop()
+        else:
+            print("Action aborted")
+
+    def open_menu(self, dir_name):
+        """select directory with music, alg 1"""
         list_of_songs = []
+        self.path_and_bag.clear_bag_of_words()
         for data in os.walk(dir_name):
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
+                self.queue.put(filename)
+        self.queue.put("\nAnd what we have here?:\n")
         self.config(cursor="")
-        shared_items_add = self.alg_do.search_for_simmilar_ver_2()
+        shared_items_add = self.alg_do.search_for_simmilar_ver_2(self.queue)
         self.left_list.delete(0, END)
         self.right_list.delete(0, END)
         for song in list_of_songs:
@@ -99,6 +117,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             temp = key.split(',', 1)
             self.queue.put(temp[0] + " : " + value)
             self.insert_to_left_list_box(temp[0] + " : " + value)
+        self.queue.put("endino-tarantino")
 
     def new_thread_2(self):
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
@@ -145,16 +164,36 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             self.insert_to_left_list_box(temp[0] + " : " + value)
         self.queue.put("endino-tarantino")
 
-    def open_menu_ver_3(self):
-        """select directory with music, alg 3"""
+    def new_thread_3(self):
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
+
+        if dir_name != "":
+            self.path_and_bag.check_if_refresh(dir_name)
+            self.config(cursor="wait")
+            self.update()
+            self.clean_queue()
+            self.queue.put("Finding files in chosen folder:\n\n")
+            num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
+            rott = tk.Tk()
+            app = App(rott, self.queue, num_files)
+            rott.protocol("WM_DELETE_WINDOW", app.on_closing)
+            threading.Thread(target=self.open_menu_ver_3, args=(dir_name,)).start()
+            app.mainloop()
+        else:
+            print("Action aborted")
+
+
+    def open_menu_ver_3(self, dir_name):
+        """select directory with music, alg 3"""
+
         list_of_songs = []
-        self.config(cursor="wait")
-        self.update()
+        self.path_and_bag.clear_bag_of_words()
         for data in os.walk(dir_name):
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
+                self.queue.put(filename)
+        self.queue.put("\nAnd what we have here?:\n")
         self.config(cursor="")
         shared_items_add = self.alg_do.search_for_simmilar_ver_3()
         self.left_list.delete(0, END)
@@ -165,6 +204,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         for key, value in shared_items_add.items():
             temp = key.split(',', 1)
             self.insert_to_left_list_box(temp[0] + " : " + value)
+        self.queue.put("endino-tarantino")
 
     def insert_to_right_list_box(self, artist, song):
         """insert to right listbox for other methods"""
