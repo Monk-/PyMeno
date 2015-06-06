@@ -1,14 +1,11 @@
 """gui and gui methods"""
-import glob
-import threading
+
 from tkinter import Frame, Listbox, Menu, LEFT, RIGHT, BOTH, END, filedialog, simpledialog
 from tkinter import ttk
 import os
 import webbrowser
-import time
-from os.path import isfile
-import math
-
+import argparse
+from googleapiclient.discovery import build
 
 class GUI(Frame):  # pylint: disable=too-many-ancestors
     """class for GUI"""
@@ -189,7 +186,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         widget = event.widget
         selection = widget.curselection()
         value = widget.get(selection[0])
-        url = self.alg_do.youtube_search(value)
+        url = self.youtube_search(value)
         webbrowser.open(url, new=new)
 
     def run(self, number):
@@ -198,6 +195,49 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             app.mainloop()
         except:
             print("ps")
+
+    @staticmethod
+    def youtube_search(to_search):
+        """
+            This function finds url to our songs throw Youtube API
+        """
+        # YouTube API
+        developer_key = "AIzaSyCn9Pk4vWC8LjjIKqol5gkku20DI0IRurU"
+        youtube_api_service_name = "youtube"
+        youtube_api_version = "v3"
+        parse = argparse.ArgumentParser()
+        parse.add_argument("--q", help="Search term", default=to_search)
+        parse.add_argument("--max-results", help="Max results", default=25)
+        args = parse.parse_args()
+        youtube = build(youtube_api_service_name, youtube_api_version, developerKey=developer_key)
+
+        # Call the search.list method to retrieve results matching the specified
+        # query term.
+        search_response = youtube.search().list(q=args.q,
+                                                part="id,snippet",
+                                                maxResults=args.max_results,
+                                                order="viewCount").execute()
+
+        videos = []
+        channels = []
+        play_lists = []
+
+        # Add each result to the appropriate list, and then display the lists of
+        # matching videos, channels, and play lists.
+        for search_result in search_response.get("items", []):
+            if search_result["id"]["kind"] == "youtube#video":
+                videos.append(search_result["id"]["videoId"])
+            elif search_result["id"]["kind"] == "youtube#channel":
+                channels.append("%s (%s)" % (search_result["snippet"]["title"],
+                                             search_result["id"]["channelId"]))
+            elif search_result["id"]["kind"] == "youtube#playlist":
+                play_lists.append("%s (%s)" % (search_result["snippet"]["title"],
+                                               search_result["id"]["playlistId"]))
+
+        try:
+            return "https://www.youtube.com/watch?v=" + videos[0]
+        except (UnicodeEncodeError, IndexError) as evil:
+            return "https://www.youtube.com/watch?v=" + "_NXrTujMP50"
 
 
 import tkinter as tk

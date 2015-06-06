@@ -7,8 +7,6 @@ from PyLyrics import PyLyrics
 import pickle
 import math
 import random
-import argparse
-from googleapiclient.discovery import build
 
 
 class FindMusic(object):
@@ -16,26 +14,22 @@ class FindMusic(object):
         FindMusic class is looking for similar music to user's library
     """
 
-    def __init__(self, my_bag, my_bag_c):
+    def __init__(self, my_bag_a, my_bag_ca):
         """
             init
         """
-        # YouTube API
-        self.DEVELOPER_KEY = "AIzaSyCn9Pk4vWC8LjjIKqol5gkku20DI0IRurU"
-        self.YOUTUBE_API_SERVICE_NAME = "youtube"
-        self.YOUTUBE_API_VERSION = "v3"
 
         # There we have a dict of average of word per song for each artist
-        self.AVERAGE_WORD_PER_SONG_PER_ARTIST = {}
+        self.average_word_per_song_artist = {}
         # There we have a dict of average of word per song for all music user's library
-        self.AVERAGE_WORD_PER_SONG = 0
+        self.average_word_per_song = 0
         # Important to not put the same values into users library again
-        self.LIST_ARTIST_SONGS = []
+        self.list_artist_songs = []
         # kind of temporary
-        self.CATALOG = Counter()
+        self.catalog = Counter()
 
-        self.MY_BAG = my_bag
-        self.MY_BAG_C = my_bag_c
+        self.my_bag = my_bag_a
+        self.my_bag_c = my_bag_ca
 
     def search_for_simmilar_ver_2(self):
         """
@@ -45,14 +39,14 @@ class FindMusic(object):
             the number of intersections between dicts then use cosine similarity
         """
         my_bag_all = Counter()
-        for value in self.MY_BAG.values():
+        for value in self.my_bag.values():
             my_bag_all += value
         temp = self.made_group_smaller()
         self.first_step()
         temp = self.second_step_ver1(temp, my_bag_all)
         temp = self.fourth_step(temp, my_bag_all)
         temp = self.fifth_step(temp)
-        return self.six_step(temp)
+        return temp
 
     def search_for_simmilar_ver_1(self, queues):
         """
@@ -60,14 +54,14 @@ class FindMusic(object):
             This algorithm based mainly on cosine similarity
         """
         my_bag_all = Counter()
-        for value in self.MY_BAG.values():
+        for value in self.my_bag.values():
             my_bag_all += value
         temp = self.made_group_smaller()
         self.first_step()
         temp = self.second_step_ver2(temp, my_bag_all)
         temp = self.fourth_step(temp, my_bag_all)
         temp = self.fifth_step(temp, queues)
-        return self.six_step(temp)
+        return temp
 
     def search_for_simmilar_ver_3(self):
         """
@@ -77,21 +71,21 @@ class FindMusic(object):
         self.first_step()
         temp = self.second_step_ver3(temp)
         temp = self.fifth_step(temp)
-        return self.six_step(temp)
+        return temp
 
     def made_group_smaller(self):
         """
             This function is calculating an average of
             words per author and defining max and min
         """
-        for artist in sorted(list(self.MY_BAG), key=lambda s: s.lower()):
-            average = len(self.MY_BAG[artist])/self.MY_BAG_C[artist]
-            self.AVERAGE_WORD_PER_SONG_PER_ARTIST[artist] = average
+        for artist in sorted(list(self.my_bag), key=lambda art: art.lower()):
+            average = len(self.my_bag[artist])/self.my_bag_c[artist]
+            self.average_word_per_song_artist[artist] = average
             print(artist, " : Average of words per author : ", average)
-        print(dict(self.MY_BAG_C))
-        maxs = max(self.AVERAGE_WORD_PER_SONG_PER_ARTIST.values())
+        print(dict(self.my_bag_c))
+        maxs = max(self.average_word_per_song_artist.values())
         print("MAX", str(maxs))
-        mins = min(self.AVERAGE_WORD_PER_SONG_PER_ARTIST.values())
+        mins = min(self.average_word_per_song_artist.values())
         min_max = (mins, maxs)
         print("MIN", str(mins))
         return min_max
@@ -101,8 +95,8 @@ class FindMusic(object):
             This function loads a date from pickle and put them into dict
         """
         data2 = dict(pickle.load(open("DATA/pickleLilEvery.pkl", 'rb')))
-        self.CATALOG.clear()
-        self.CATALOG.update({key: value for key, value in data2.items()})
+        self.catalog.clear()
+        self.catalog.update({key: value for key, value in data2.items()})
 
     def second_step_ver1(self, min_max, my_bag_all):
         """
@@ -110,18 +104,18 @@ class FindMusic(object):
             based on amount of shared most popular words in users libraries
         """
         shared_items = {}
-        data_from_pickle = dict(pickle.load(
+        data_pickle = dict(pickle.load(
             open("DATA/pickleLilFromArtistWordPerSong.pkl", 'rb')))
         # Here we are making an intersections between
         # all popular words in our library and each song
         # in library of comparing songs
-        for key, value in self.CATALOG.items():
+        for key, value in self.catalog.items():
             shared_items[key] = len(set(Counter(value)) & set(my_bag_all))
         # There we choose only authors with average of word
         # per song between max and min of our music library
         if min_max[0] != min_max[1]:
             chosen_data = Counter({key: value for key, value in shared_items.items()
-                                   if(min_max[1] >= data_from_pickle[key] >= min_max[0]) is True})
+                                   if(min_max[1] >= data_pickle[key] >= min_max[0]) is True})
         else:
             chosen_data = Counter({key: value for key, value in shared_items.items()})
         keys_list = dict(sorted(chosen_data.most_common(20), key=lambda data: data[1])).keys()
@@ -133,13 +127,13 @@ class FindMusic(object):
             The purpose is to find the perfect artist
         """
         shared_items = {}
-        data_from_pickle = dict(pickle.load(open("DATA/pickleLilFromArtistWordPerSong.pkl", 'rb')))
-        for key, value in self.CATALOG.items():
-            shared_items[key] = self.counter_cosine_similarity(Counter(value), my_bag_all)
+        data_pickle = dict(pickle.load(open("DATA/pickleLilFromArtistWordPerSong.pkl", 'rb')))
+        for key, value in self.catalog.items():
+            shared_items[key] = self.similarity(Counter(value), my_bag_all)
         print(shared_items)
         if min_max[0] != min_max[1]:
             chosen_data = Counter({key: value for key, value in shared_items.items()
-                                   if(min_max[1] >= data_from_pickle[key] >= min_max[0]) is True})
+                                   if(min_max[1] >= data_pickle[key] >= min_max[0]) is True})
         else:
             chosen_data = Counter({key: value for key, value in shared_items.items()})
         keys_list = dict(sorted(chosen_data.most_common(20), key=lambda data: data[1])).keys()
@@ -152,23 +146,24 @@ class FindMusic(object):
         """
         shared_items = []
         shared_items_album = {}
-        data_from_pickle = pickle.load(open("DATA/pickleLil300.pkl", 'rb'))
-        data_from_pickle.update(pickle.load(open("DATA/pickleLil500.pkl", 'rb')))
-        data_from_pickle.update(pickle.load(open("DATA/pickleLil303.pkl", 'rb')))
-        data_from_pickle.update(pickle.load(open("DATA/pickleLil600.pkl", 'rb')))
-        for key, value in self.MY_BAG.items():
+        data_pickle = pickle.load(open("DATA/pickleLil300.pkl", 'rb'))
+        data_pickle.update(pickle.load(open("DATA/pickleLil500.pkl", 'rb')))
+        data_pickle.update(pickle.load(open("DATA/pickleLil303.pkl", 'rb')))
+        data_pickle.update(pickle.load(open("DATA/pickleLil600.pkl", 'rb')))
+        for key, value in self.my_bag.items():
             shared_items_album.clear()
-            for key_lib, value_lib in data_from_pickle.items():
-                s = key_lib.replace('_', ' ')
-                temp = s.split(',', 1)
+            for key_lib, value_lib in data_pickle.items():
+                phrase = key_lib.replace('_', ' ')
+                temp = phrase.split(',', 1)
                 if key != temp[0]:
-                    shared_items_album[key_lib] = self.counter_cosine_similarity(Counter(value), value_lib)
+                    shared_items_album[key_lib] = self.similarity(Counter(value), value_lib)
 
-            [shared_items.append(x) for x in list(dict(sorted(Counter(shared_items_album).most_common(40),
-                                                              key=lambda data: data[1])).keys())]
-        data_from_pickle = dict(pickle.load(open("DATA/pickleLilFromArtistWordPerSong.pkl", 'rb')))
+            # [shared_items.append(x)
+            #  for x in list(dict(sorted(Counter(shared_items_album).most_common(40),
+            #                           key=lambda data: data[1])).keys())]
+        data_pickle = dict(pickle.load(open("DATA/pickleLilFromArtistWordPerSong.pkl", 'rb')))
         chosen_data = [key for key in shared_items
-                       if(min_max[1] >= data_from_pickle[key.split(',', 1)[0]] >= min_max[0]) is True]
+                       if(min_max[1] >= data_pickle[key.split(',', 1)[0]] >= min_max[0]) is True]
         return chosen_data
 
     def fourth_step(self, list_chosen, my_bag_all):
@@ -177,17 +172,17 @@ class FindMusic(object):
             The purpose is to find the perfect album from chosen artist
         """
         shared_items_add = {}
-        data_from_pickle = pickle.load(open("DATA/pickleLil300.pkl", 'rb'))
-        data_from_pickle.update(pickle.load(open("DATA/pickleLil500.pkl", 'rb')))
-        data_from_pickle.update(pickle.load(open("DATA/pickleLil303.pkl", 'rb')))
-        data_from_pickle.update(pickle.load(open("DATA/pickleLil600.pkl", 'rb')))
+        data_pickle = pickle.load(open("DATA/pickleLil300.pkl", 'rb'))
+        data_pickle.update(pickle.load(open("DATA/pickleLil500.pkl", 'rb')))
+        data_pickle.update(pickle.load(open("DATA/pickleLil303.pkl", 'rb')))
+        data_pickle.update(pickle.load(open("DATA/pickleLil600.pkl", 'rb')))
         # We need to pick up some date from pickle
         # with dicts of words from each album of artist
-        for key, value in data_from_pickle.items():
+        for key, value in data_pickle.items():
             temp = key.split(',', 1)
             if temp[0] in list_chosen:
                 shared_items_add[key] = \
-                    self.counter_cosine_similarity(Counter(value), my_bag_all)
+                    self.similarity(Counter(value), my_bag_all)
         # In shared_items[artist,album} we have value of similarity
         temp = Counter({key: value for key, value in shared_items_add.items()
                         if value not in my_bag_all.keys()})
@@ -213,14 +208,8 @@ class FindMusic(object):
                     shared_items_add[key] = tracks[num].name
         return shared_items_add
 
-    def six_step(self, shared_items_add):
-        """
-            This function display chosen titles on GUI
-        """
-        return shared_items_add
-
     @staticmethod
-    def counter_cosine_similarity(vector1, vector2):
+    def similarity(vector1, vector2):
         """
             This function calculate similarity between vector
             the closer to 1 the more similar are the songs
@@ -235,40 +224,3 @@ class FindMusic(object):
         magnitude_b = math.sqrt(sum(vector2.get(key, 0)**2 for key in terms))
         return dot_product / (magnitude_a * magnitude_b)
 
-    def youtube_search(self, to_search):
-        """
-            This function finds url to our songs throw Youtube API
-        """
-        parse = argparse.ArgumentParser()
-        parse.add_argument("--q", help="Search term", default=to_search)
-        parse.add_argument("--max-results", help="Max results", default=25)
-        args = parse.parse_args()
-        youtube = build(self.YOUTUBE_API_SERVICE_NAME, self.YOUTUBE_API_VERSION, developerKey=self.DEVELOPER_KEY)
-
-        # Call the search.list method to retrieve results matching the specified
-        # query term.
-        search_response = youtube.search().list(q=args.q,
-                                                part="id,snippet",
-                                                maxResults=args.max_results,
-                                                order="viewCount").execute()
-
-        videos = []
-        channels = []
-        play_lists = []
-
-        # Add each result to the appropriate list, and then display the lists of
-        # matching videos, channels, and play lists.
-        for search_result in search_response.get("items", []):
-            if search_result["id"]["kind"] == "youtube#video":
-                videos.append(search_result["id"]["videoId"])
-            elif search_result["id"]["kind"] == "youtube#channel":
-                channels.append("%s (%s)" % (search_result["snippet"]["title"],
-                                             search_result["id"]["channelId"]))
-            elif search_result["id"]["kind"] == "youtube#playlist":
-                play_lists.append("%s (%s)" % (search_result["snippet"]["title"],
-                                               search_result["id"]["playlistId"]))
-
-        try:
-            return "https://www.youtube.com/watch?v=" + videos[0]
-        except (UnicodeEncodeError, IndexError) as evil:
-            return "https://www.youtube.com/watch?v=" + "_NXrTujMP50"
