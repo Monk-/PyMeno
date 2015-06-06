@@ -1,11 +1,13 @@
 """gui and gui methods"""
-
+import tkinter as tk
 from tkinter import Frame, Listbox, Menu, LEFT, RIGHT, BOTH, END, filedialog, simpledialog
 from tkinter import ttk
 import os
 import webbrowser
 import argparse
 from googleapiclient.discovery import build
+import threading
+import queue
 
 
 class GUI(Frame):  # pylint: disable=too-many-ancestors
@@ -52,20 +54,15 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             add_command(label="Parse artists information to database", underline=0,
                         command=self.go_to_lilis_parsing)
 
-
         menu_bar.add_cascade(label="File", underline=0, menu=file_menu)
         menu_bar.add_cascade(label="Data", underline=0, menu=menu2_parse)
-        """sub_menu = Menu(menu_bar, tearoff=False)
-        sub_menu.add_command(label="Video")
-        sub_menu.add_command(label="Channel")
-        sub_menu.add_command(label="Playlist")
-        menu2_parse.add_cascade(label='Youtube search', menu=sub_menu, underline=0)"""
 
     def on_exit(self):
         """quit"""
         self.quit()
 
     def new_thread_1(self):
+        """thread for the first algorythm"""
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
 
@@ -75,7 +72,10 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             self.update()
             self.clean_queue()
             self.queue.put("Finding files in chosen folder:\n\n")
-            num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
+            num_files = len([val for sub_list in
+                             [[os.path.join(i[0], j)for j in i[2]]
+                              for i in os.walk(dir_name)]
+                             for val in sub_list])
             rott = tk.Tk()
             app = App(rott, self.queue, num_files)
             rott.protocol("WM_DELETE_WINDOW", app.on_closing)
@@ -107,6 +107,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         self.queue.put("endino-tarantino")
 
     def new_thread_2(self):
+        """thread for the second algorythm"""
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
 
@@ -116,7 +117,10 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             self.update()
             self.clean_queue()
             self.queue.put("Finding files in chosen folder:\n\n")
-            num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
+            num_files = len([val for sub_list in
+                             [[os.path.join(i[0], j)for j in i[2]]
+                              for i in os.walk(dir_name)]
+                             for val in sub_list])
             rott = tk.Tk()
             app = App(rott, self.queue, num_files)
             rott.protocol("WM_DELETE_WINDOW", app.on_closing)
@@ -126,6 +130,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             print("Action aborted")
 
     def clean_queue(self):
+        """cleaning queue if user exit manualy"""
         if not self.queue.empty():
             while not self.queue.empty():
                 self.queue.get()
@@ -152,6 +157,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         self.queue.put("endino-tarantino")
 
     def new_thread_3(self):
+        """thread for the third algorythm"""
         dir_name = filedialog.askdirectory(parent=self, initialdir="/",
                                            title='Please select a directory')
 
@@ -161,7 +167,10 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             self.update()
             self.clean_queue()
             self.queue.put("Finding files in chosen folder:\n\n")
-            num_files = len([val for sub_list in [[os.path.join(i[0], j) for j in i[2]] for i in os.walk(dir_name)] for val in sub_list])
+            num_files = len([val for sub_list in
+                             [[os.path.join(i[0], j)
+                               for j in i[2]] for i in os.walk(dir_name)]
+                             for val in sub_list])
             rott = tk.Tk()
             app = App(rott, self.queue, num_files)
             rott.protocol("WM_DELETE_WINDOW", app.on_closing)
@@ -169,7 +178,6 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             app.mainloop()
         else:
             print("Action aborted")
-
 
     def open_menu_ver_3(self, dir_name):
         """select directory with music, alg 3"""
@@ -216,19 +224,11 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         url = self.youtube_search(value)
         webbrowser.open(url, new=new)
 
-    def run(self, number):
-        try:
-            app = App(self.queue, number)
-            app.mainloop()
-        except:
-            print("ps")
-
     @staticmethod
     def youtube_search(to_search):
         """
             This function finds url to our songs throw Youtube API
         """
-        # YouTube API
         developer_key = "AIzaSyCn9Pk4vWC8LjjIKqol5gkku20DI0IRurU"
         youtube_api_service_name = "youtube"
         youtube_api_version = "v3"
@@ -236,11 +236,12 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         parse.add_argument("--q", help="Search term", default=to_search)
         parse.add_argument("--max-results", help="Max results", default=25)
         args = parse.parse_args()
-        youtube = build(youtube_api_service_name, youtube_api_version, developerKey=developer_key)
+        youtube = build(youtube_api_service_name,
+                        youtube_api_version, developerKey=developer_key)
 
         # Call the search.list method to retrieve results matching the specified
         # query term.
-        search_response = youtube.search().list(q=args.q,
+        search_response = youtube.search().list(q=args.q,  # pylint: disable=no-member
                                                 part="id,snippet",
                                                 maxResults=args.max_results,
                                                 order="viewCount").execute()
@@ -263,19 +264,15 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
 
         try:
             return "https://www.youtube.com/watch?v=" + videos[0]
-        except (UnicodeEncodeError, IndexError) as evil:
+        except (UnicodeEncodeError, IndexError):
             return "https://www.youtube.com/watch?v=" + "_NXrTujMP50"
 
 
-import tkinter as tk
-import threading
-import queue
-
-
-class App(Frame):
-
+class App(Frame):  # pylint: disable=too-many-ancestors
+    """information window class"""
     def __init__(self, master, queue1, number):
-        Frame.__init__(self,master)
+        """initialising view"""
+        Frame.__init__(self, master)
         self.root = master
         self.root.title("Please, bear with me, for a moment : )")
         self.queue = queue1
@@ -291,7 +288,8 @@ class App(Frame):
         self.periodiccall()
 
     def periodiccall(self):
-        self.checkqueue()
+        """function called periodical to get new information"""
+        self.check_queue()
         if self.running:
             self._job = self.after(100, self.periodiccall)
         else:
@@ -302,6 +300,7 @@ class App(Frame):
             print("ASas")
 
     def on_closing(self):
+        """override what to do on manual close"""
         self.listbox.destroy()
         self.progressbar.destroy()
         self.root.destroy()
@@ -309,18 +308,17 @@ class App(Frame):
         self.after_cancel(self._job)
         self._job = None
 
-    def checkqueue(self):
+    def check_queue(self):
+        """check queue"""
         while self.queue.qsize():
             try:
                 msg = self.queue.get(0)
                 self.listbox.insert('end', msg)
                 self.listbox.yview(END)
                 self.progressbar.step(100/(self.number + 30))
-                if msg == "endino-tarantino":#crazy name so noone will ever have file named like this
+                if msg == "endino-tarantino":  # crazy name so noone will ever have file like this
                     self.running = 0
             except queue.Empty:
-                #killing thread
+                # killing thread
                 self.running = 0
                 self.root.destroy()
-
-
