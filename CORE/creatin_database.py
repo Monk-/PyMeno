@@ -16,6 +16,8 @@ class CreatingDatabase(object):
     """
         Class responsible for creating DB
     """
+    static_label = ""
+
     def __init__(self):
         """
             init
@@ -27,7 +29,6 @@ class CreatingDatabase(object):
         self.list_of_average_per_artist = {}
         self.calc_number_of_songs = 0
         self.calc_number_of_songs_per_album = 0
-        self.label = ""
 
     def download_list_of_artists(self):
         """
@@ -35,7 +36,7 @@ class CreatingDatabase(object):
             from last.fm throw their API
         """
         url = "http://ws.audioscrobbler.com/2.0/" \
-            "?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000"
+              "?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000"
         request.urlretrieve(url, "data/scrobble.xml")
         self.logger.debug('downloading scrobble list')
 
@@ -61,7 +62,7 @@ class CreatingDatabase(object):
         self.reads_dicts()
         self.calc_number_of_songs = 0
         self.calc_number_of_songs_per_album = 0
-        self.label = ""
+        CreatingDatabase.static_label = ""
 
     def reads_dicts(self):
         """
@@ -134,12 +135,13 @@ class CreatingDatabase(object):
         """
             This method calculates average
         """
-        if self.label in self.dictionary_per_album:
-            self.list_of_average[self.label] = \
-                sum(self.dictionary_per_album[self.label].values())/self.calc_number_of_songs_per_album
+        if CreatingDatabase.static_label in self.dictionary_per_album:
+            self.list_of_average[CreatingDatabase.static_label] = \
+                sum(self.dictionary_per_album[CreatingDatabase.static_label].values()) \
+                / self.calc_number_of_songs_per_album
             self.list_of_average_per_artist[current_artist] = \
-                sum(self.dictionary_for_artist[current_artist].values())/self.calc_number_of_songs
-            self.__log_info(self.list_of_average[self.label],
+                sum(self.dictionary_for_artist[current_artist].values()) / self.calc_number_of_songs
+            self.__log_info(self.list_of_average[CreatingDatabase.static_label],
                             self.list_of_average_per_artist[current_artist])
 
     def operation_per_song(self, track, album):
@@ -148,7 +150,7 @@ class CreatingDatabase(object):
         """
         try:
             current_artist = track.artist
-            self.label = current_artist + "," + album.name
+            CreatingDatabase.static_label = current_artist + "," + album.name
             print(track.artist, " : ", album.name, " : ", track.name, " : ")
             # operation on lyrics
             song = self.do_the_dicts(current_artist, track.name)
@@ -178,7 +180,7 @@ class CreatingDatabase(object):
         if current_artist not in self.dictionary_for_artist:
             self.dictionary_for_artist[current_artist] = Counter(song)
         else:
-            self.dictionary_for_artist[current_artist] =\
+            self.dictionary_for_artist[current_artist] = \
                 Counter(self.dictionary_for_artist[current_artist]) + Counter(song)
         return self.dictionary_for_artist
 
@@ -186,11 +188,11 @@ class CreatingDatabase(object):
         """
             This function is putting counter into dicts with label of "current_artist,album"
         """
-        if self.label not in self.dictionary_per_album:
-            self.dictionary_per_album[self.label] = Counter(song)
+        if CreatingDatabase.static_label not in self.dictionary_per_album:
+            self.dictionary_per_album[CreatingDatabase.static_label] = Counter(song)
         else:
-            self.dictionary_per_album[self.label] = \
-                self.dictionary_per_album[self.label] + Counter(song)
+            self.dictionary_per_album[CreatingDatabase.static_label] = \
+                self.dictionary_per_album[CreatingDatabase.static_label] + Counter(song)
 
     @staticmethod
     def __log_info(info1, info2):
@@ -199,4 +201,3 @@ class CreatingDatabase(object):
         """
         print("Average of word per song in specific album :: ", info1)
         print("Average of word per song :: ", info2)
-

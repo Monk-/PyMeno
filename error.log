@@ -20695,3 +20695,173 @@ ValueError: Song or Singer does not exist or the API does not have Lyrics
 2015-06-07 20:21:18,487 - core.check_paths - ERROR - cannot read the file
 2015-06-07 20:21:25,633 - core.check_paths - ERROR - cannot read the file
 2015-06-07 20:21:33,813 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,977 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,978 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,978 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,978 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,979 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,979 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,979 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,979 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,979 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,980 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,980 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,980 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,980 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,981 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,981 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,981 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,981 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,981 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,982 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,982 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,982 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,982 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,983 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,983 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,983 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,983 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:30,983 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:33,141 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:22:36,405 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,751 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,752 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,752 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,752 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,753 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,753 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,753 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,753 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,753 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,754 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,754 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,754 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,754 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,755 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,755 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,755 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,755 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,755 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,756 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,756 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,756 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,756 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,757 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,757 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,757 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,757 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:08,757 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:11,026 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:14,326 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:15,210 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:17,117 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:19,946 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:26:23,103 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:36:27,466 - core.check_paths - ERROR - cannot read the file
+2015-06-07 21:39:46,615 - core.check_paths - ERROR - cannot read the file
+2015-06-07 22:01:24,775 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:26,904 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:27,166 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:27,416 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:27,689 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:28,001 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:28,273 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:28,567 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:28,844 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:29,083 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:29,382 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:29,628 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:29,875 - core.check_paths - ERROR - cannot read the file
+2015-06-07 22:01:32,879 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:33,275 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:33,413 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:33,666 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:33,910 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:34,191 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:34,280 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:34,525 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:34,623 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:34,894 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:34,990 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:35,215 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:35,527 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:35,712 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:36,039 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:36,259 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:36,529 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:37,087 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:37,354 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:37,544 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:37,625 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:38,111 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:38,207 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:38,391 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:38,503 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:38,761 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:39,176 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:39,406 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:39,757 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:39,997 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:40,150 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:40,360 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:40,511 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:40,791 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:41,073 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:41,460 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:41,551 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:41,801 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:42,037 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:01:42,264 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:30,093 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:32,534 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:32,775 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:33,087 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:33,415 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:33,673 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:34,022 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:34,319 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:34,609 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:34,893 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:35,202 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:35,443 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:35,693 - core.check_paths - ERROR - cannot read the file
+2015-06-07 22:03:39,006 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:39,284 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:39,421 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:39,728 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:39,824 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:40,029 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:40,398 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:40,648 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:40,772 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:40,998 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:41,157 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:41,359 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:41,705 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:41,897 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:42,225 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:42,493 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:42,764 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:43,028 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:43,443 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:43,644 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:43,998 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:44,250 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:44,495 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:44,732 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:44,817 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:45,119 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:45,214 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:45,395 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:45,478 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:45,704 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:45,880 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:46,120 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:46,212 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:46,414 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:46,651 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:46,875 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:47,098 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:47,461 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:47,581 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com
+2015-06-07 22:03:47,866 - requests.packages.urllib3.connectionpool - INFO - Starting new HTTP connection (1): lyrics.wikia.com

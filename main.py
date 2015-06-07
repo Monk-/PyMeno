@@ -1,7 +1,9 @@
 """main class"""
 import tkinter as tk
-from gui_dir.gui import GUI
-from core import MakeBagOfWords, FindMusic, CreatingDatabase
+from gui_dir.gui import GUI  # pylint: disable=import-error
+from core.creatin_database import CreatingDatabase  # pylint: disable=import-error
+from core.algh import FindMusic  # pylint: disable=import-error
+from core.check_paths import MakeBagOfWords  # pylint: disable=import-error
 
 
 class PyMeno(object):
