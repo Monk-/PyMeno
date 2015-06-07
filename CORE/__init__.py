@@ -3,6 +3,6 @@
 """
 __author__ = 'Lily'
 
-from CORE.creatin_database import CreatingDatabase
-from CORE.algh import FindMusic
-from CORE.check_paths import MakeBagOfWords
+from core.creatin_database import CreatingDatabase
+from core.algh import FindMusic
+from core.check_paths import MakeBagOfWords

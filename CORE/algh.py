@@ -94,7 +94,7 @@ class FindMusic(object):
         """
             This function loads a date from pickle and put them into dict
         """
-        data2 = dict(pickle.load(open("DATA/pickleLilEvery.pkl", 'rb')))
+        data2 = dict(pickle.load(open("data/pickleLilEvery.pkl", 'rb')))
         self.catalog.clear()
         self.catalog.update({key: value for key, value in data2.items()})
 
@@ -105,7 +105,7 @@ class FindMusic(object):
         """
         shared_items = {}
         data_pickle = dict(pickle.load(
-            open("DATA/pickleLilFromArtistWordPerSong.pkl", 'rb')))
+            open("data/pickleLilFromArtistWordPerSong.pkl", 'rb')))
         # Here we are making an intersections between
         # all popular words in our library and each song
         # in library of comparing songs
@@ -127,7 +127,7 @@ class FindMusic(object):
             The purpose is to find the perfect artist
         """
         shared_items = {}
-        data_pickle = dict(pickle.load(open("DATA/pickleLilFromArtistWordPerSong.pkl", 'rb')))
+        data_pickle = dict(pickle.load(open("data/pickleLilFromArtistWordPerSong.pkl", 'rb')))
         for key, value in self.catalog.items():
             shared_items[key] = self.similarity(Counter(value), my_bag_all)
         print(shared_items)
@@ -146,10 +146,10 @@ class FindMusic(object):
         """
         shared_items = []
         shared_items_album = {}
-        data_pickle = pickle.load(open("DATA/pickleLil300.pkl", 'rb'))
-        data_pickle.update(pickle.load(open("DATA/pickleLil500.pkl", 'rb')))
-        data_pickle.update(pickle.load(open("DATA/pickleLil303.pkl", 'rb')))
-        data_pickle.update(pickle.load(open("DATA/pickleLil600.pkl", 'rb')))
+        data_pickle = pickle.load(open("data/pickleLil300.pkl", 'rb'))
+        data_pickle.update(pickle.load(open("data/pickleLil500.pkl", 'rb')))
+        data_pickle.update(pickle.load(open("data/pickleLil303.pkl", 'rb')))
+        data_pickle.update(pickle.load(open("data/pickleLil600.pkl", 'rb')))
         for key, value in self.my_bag.items():
             shared_items_album.clear()
             for key_lib, value_lib in data_pickle.items():
@@ -161,7 +161,7 @@ class FindMusic(object):
             # [shared_items.append(x)
             #  for x in list(dict(sorted(Counter(shared_items_album).most_common(40),
             #                           key=lambda data: data[1])).keys())]
-        data_pickle = dict(pickle.load(open("DATA/pickleLilFromArtistWordPerSong.pkl", 'rb')))
+        data_pickle = dict(pickle.load(open("data/pickleLilFromArtistWordPerSong.pkl", 'rb')))
         chosen_data = [key for key in shared_items
                        if(min_max[1] >= data_pickle[key.split(',', 1)[0]] >= min_max[0]) is True]
         return chosen_data
@@ -172,10 +172,10 @@ class FindMusic(object):
             The purpose is to find the perfect album from chosen artist
         """
         shared_items_add = {}
-        data_pickle = pickle.load(open("DATA/pickleLil300.pkl", 'rb'))
-        data_pickle.update(pickle.load(open("DATA/pickleLil500.pkl", 'rb')))
-        data_pickle.update(pickle.load(open("DATA/pickleLil303.pkl", 'rb')))
-        data_pickle.update(pickle.load(open("DATA/pickleLil600.pkl", 'rb')))
+        data_pickle = pickle.load(open("data/pickleLil300.pkl", 'rb'))
+        data_pickle.update(pickle.load(open("data/pickleLil500.pkl", 'rb')))
+        data_pickle.update(pickle.load(open("data/pickleLil303.pkl", 'rb')))
+        data_pickle.update(pickle.load(open("data/pickleLil600.pkl", 'rb')))
         # We need to pick up some date from pickle
         # with dicts of words from each album of artist
         for key, value in data_pickle.items():

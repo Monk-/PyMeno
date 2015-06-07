@@ -2,5 +2,5 @@
     Module for application gui
 """
 
-from GUI_DIR.gui import App
-from GUI_DIR.gui import GUI
+from gui_dir.gui import App
+from gui_dir.gui import GUI

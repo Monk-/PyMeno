@@ -2,7 +2,7 @@
     In this file we focus on creating database to comparing songs
 """
 from urllib import request
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as Et
 import pickle
 from collections import Counter
 import re
@@ -35,7 +35,7 @@ class CreatingDatabase(object):
         """
         url = "http://ws.audioscrobbler.com/2.0/" \
             "?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000"
-        request.urlretrieve(url, "scrobble.xml")
+        request.urlretrieve(url, "data/scrobble.xml")
 
     @staticmethod
     def do_the_dicts(artist, name):
@@ -65,10 +65,10 @@ class CreatingDatabase(object):
         """
             This function is reading dicts from pickles
         """
-        self.dictionary_for_artist = pickle.load(open("DATA/pickleLilEvery.pkl", 'rb'))
-        self.list_of_average = pickle.load(open("DATA/pickleLilWordPerSong.pkl", 'rb'))
+        self.dictionary_for_artist = pickle.load(open("data/pickleLilEvery.pkl", 'rb'))
+        self.list_of_average = pickle.load(open("data/pickleLilWordPerSong.pkl", 'rb'))
         self.list_of_average_per_artist = \
-            pickle.load(open("DATA/pickleLilFromArtistWordPerSong.pkl", 'rb'))
+            pickle.load(open("data/pickleLilFromArtistWordPerSong.pkl", 'rb'))
 
     def parse_file(self, number_of, number_from):
         """
@@ -77,7 +77,7 @@ class CreatingDatabase(object):
         """
         if number_of < 0 or number_of > 1000:
             number_of = 200
-        root = ET.parse('DATA/scrobble.xml').getroot()
+        root = Et.parse('data/scrobble.xml').getroot()
         if number_from != 0:
             self.refresh_dicts()
         counter = 0
@@ -115,13 +115,13 @@ class CreatingDatabase(object):
         """
             This function is putting dicts into pickles
         """
-        with open("DATA/pickleLil" + str(number_of) + ".pkl", 'wb') as file:
+        with open("data/pickleLil" + str(number_of) + ".pkl", 'wb') as file:
             pickle.dump(self.dictionary_per_album, file)
-        with open("DATA/pickleLilEvery" + ".pkl", 'wb') as file:
+        with open("data/pickleLilEvery" + ".pkl", 'wb') as file:
             pickle.dump(self.dictionary_for_artist, file)
-        with open("DATA/pickleLilWordPerSong" + ".pkl", 'wb') as file:
+        with open("data/pickleLilWordPerSong" + ".pkl", 'wb') as file:
             pickle.dump(self.list_of_average, file)
-        with open("DATA/pickleLilFromArtistWordPerSong" + ".pkl", 'wb') as file:
+        with open("data/pickleLilFromArtistWordPerSong" + ".pkl", 'wb') as file:
             pickle.dump(self.list_of_average_per_artist, file)
         self.check()
 
@@ -169,7 +169,7 @@ class CreatingDatabase(object):
         """
             This function is printing a pickle
         """
-        try_it = pickle.load(open("DATA/pickleLilEvery.pkl", 'rb'))
+        try_it = pickle.load(open("data/pickleLilEvery.pkl", 'rb'))
         print(try_it)
 
     def dict_for_artist(self, current_artist, song):

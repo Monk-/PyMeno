@@ -1,8 +1,8 @@
 """main class"""
 from tkinter import Tk
 
-from GUI_DIR import GUI
-from CORE import MakeBagOfWords, FindMusic, CreatingDatabase
+from gui_dir import GUI
+from core import MakeBagOfWords, FindMusic, CreatingDatabase
 
 
 class PyMeno(object):
