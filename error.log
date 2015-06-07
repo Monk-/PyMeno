@@ -190,3 +190,10 @@ ValueError: Song or Singer does not exist or the API does not have Lyrics
 2015-06-07 14:21:46,712 - core.check_paths - ERROR - cannot read the file
 2015-06-07 14:21:48,321 - core.check_paths - ERROR - cannot read the file
 2015-06-07 14:21:58,682 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:29:56,632 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:29:56,828 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:29:57,032 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:30:05,214 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:30:10,126 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:30:11,839 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:30:22,481 - core.check_paths - ERROR - cannot read the file
