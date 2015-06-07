@@ -1,7 +1,5 @@
 """main class"""
 import tkinter as tk
-import logging
-from logging.config import fileConfig
 from gui_dir import GUI
 from core import MakeBagOfWords, FindMusic, CreatingDatabase
 
@@ -15,6 +13,7 @@ class PyMeno(object):
         self.db_parser = CreatingDatabase()
         self.check = MakeBagOfWords()
         self.alg = FindMusic(self.check.my_bag, self.check.my_bag_c)
+
         self.say_credit()
         self.run_app()
 
@@ -31,6 +30,4 @@ class PyMeno(object):
         print("Klaudia Olejniczak")
         print("Oleksandr Kuzhel")
 
-
-logging.config.fileConfig('config.ini')
 PyMeno()

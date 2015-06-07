@@ -328,7 +328,7 @@ class App(Frame):  # pylint: disable=too-many-ancestors
         self.queue = queue1
         self.number = number
         self.logger = logging.getLogger(__name__)
-        self.listbox = tk.Listbox(self.root, width=50, height=20)
+        self.listbox = tk.Listbox(self.root, width=65, height=20)
         self.progressbar = ttk.Progressbar(self.root, orient='horizontal',
                                            length=400, mode='determinate')
         self.listbox.pack(padx=10, pady=10)

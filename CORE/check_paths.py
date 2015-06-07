@@ -55,7 +55,7 @@ class MakeBagOfWords(object):
             else:
                 # If was
                 print("That was already parsed", " : \n", label)
-        except (ValueError, UnicodeEncodeError):
+        except (ValueError, UnicodeEncodeError, KeyError):
             self.logger.error("cannot read the file")
             print("cannot read the file")
         return self.list_artist_songs
@@ -66,19 +66,22 @@ class MakeBagOfWords(object):
             We used here a lemmatize to simplify form of words for example running -> run
             And stopwords to remove them from dict
         """
-        to_simpler_form = WordNetLemmatizer()
-        song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
-        song = [word for word in song if word not in stopwords.words('english')]
-        song = [re.sub(r'[^A-Za-z0-9]+', '', word) for word in song]
-        song = [to_simpler_form.lemmatize(word, 'v') for word in song]
-        cnt = Counter(song)
-        if artist_name not in self.my_bag:
-            print("Parsing author : ", artist_name, " : Please wait... : )")
-            self.my_bag[artist_name] = cnt
-            self.my_bag_c[artist_name] = 1
-        else:
-            self.my_bag[artist_name] = self.my_bag[artist_name] + cnt
-            self.my_bag_c[artist_name] += 1
+        try:
+            to_simpler_form = WordNetLemmatizer()
+            song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+            song = [word for word in song if word not in stopwords.words('english')]
+            song = [re.sub(r'[^A-Za-z0-9]+', '', word) for word in song]
+            song = [to_simpler_form.lemmatize(word, 'v') for word in song]
+            cnt = Counter(song)
+            if artist_name not in self.my_bag:
+                print("Parsing author : ", artist_name, " : Please wait... : )")
+                self.my_bag[artist_name] = cnt
+                self.my_bag_c[artist_name] = 1
+            else:
+                self.my_bag[artist_name] = self.my_bag[artist_name] + cnt
+                self.my_bag_c[artist_name] += 1
+        except(ConnectionError, ConnectionResetError):
+            logging.error("Connection error")
 
     def clear_bag_of_words(self):
         """
