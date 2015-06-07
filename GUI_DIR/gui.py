@@ -109,9 +109,9 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                 self.queue.put(filename)
         self.queue.put("\nAnd what we have here?:\n")
         self.config(cursor="")
-        shared_items_add = self.alg_do.search_for_simmilar_ver_2(False)
+        shared_items_add = self.alg_do.search_for_simmilar_ver_2(False, self.queue)
         if not shared_items_add:
-            shared_items_add = self.alg_do.search_for_simmilar_ver_2(True)
+            shared_items_add = self.alg_do.search_for_simmilar_ver_2(True, self.queue)
         self.left_list.delete(0, END)
         self.right_list.delete(0, END)
         for song in list_of_songs:
@@ -166,9 +166,9 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                 self.queue.put(filename)
         self.queue.put("\nAnd what we have here?:\n")
         self.config(cursor="")
-        shared_items_add = self.alg_do.search_for_simmilar_ver_1(False)
+        shared_items_add = self.alg_do.search_for_simmilar_ver_1(False, self.queue)
         if not shared_items_add:
-            shared_items_add = self.alg_do.search_for_simmilar_ver_1(True)
+            shared_items_add = self.alg_do.search_for_simmilar_ver_1(True, self.queue)
 
         self.left_list.delete(0, END)
         self.right_list.delete(0, END)
@@ -218,9 +218,9 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                 self.queue.put(filename)
         self.queue.put("\nAnd what we have here?:\n")
         self.config(cursor="")
-        shared_items_add = self.alg_do.search_for_simmilar_ver_3(False)
+        shared_items_add = self.alg_do.search_for_simmilar_ver_3(False, self.queue)
         if not shared_items_add:
-            shared_items_add = self.alg_do.search_for_simmilar_ver_3(True)
+            shared_items_add = self.alg_do.search_for_simmilar_ver_3(True, self.queue)
 
         self.left_list.delete(0, END)
         self.right_list.delete(0, END)
