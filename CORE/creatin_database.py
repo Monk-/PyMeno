@@ -136,7 +136,8 @@ class CreatingDatabase(object):
         """
         if self.label in self.dictionary_per_album:
             self.list_of_average[self.label] = \
-                sum(self.dictionary_per_album[self.label].values())/self.calc_number_of_songs_per_album
+                sum(self.dictionary_per_album[self.label]
+                    .values())/self.calc_number_of_songs_per_album
             self.list_of_average_per_artist[current_artist] = \
                 sum(self.dictionary_for_artist[current_artist].values())/self.calc_number_of_songs
             self.__log_info(self.list_of_average[self.label],
