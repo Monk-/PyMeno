@@ -30,7 +30,7 @@ class FindMusic(object):
         self.my_bag = my_bag_a
         self.my_bag_c = my_bag_ca
 
-    def search_for_simmilar_ver_2(self, queue):
+    def search_for_simmilar_ver_2(self, repeat, queue):
         """
             # Algorithm II #
             We parts our code to have more visibility of what we doing
@@ -40,14 +40,17 @@ class FindMusic(object):
         my_bag_all = Counter()
         for value in self.my_bag.values():
             my_bag_all += value
-        temp = self.made_group_smaller()
+        if repeat is False:
+            temp = self.made_group_smaller()
+        else:
+            temp = (0, 0)
         self.first_step()
         temp = self.second_step_ver1(temp, my_bag_all)
         temp = self.fourth_step(temp, my_bag_all)
         temp = self.fifth_step(temp, queue)
         return temp
 
-    def search_for_simmilar_ver_1(self, queues):
+    def search_for_simmilar_ver_1(self, repeat, queues):
         """
             # Algorithm I #
             This algorithm based mainly on cosine similarity
@@ -55,18 +58,24 @@ class FindMusic(object):
         my_bag_all = Counter()
         for value in self.my_bag.values():
             my_bag_all += value
-        temp = self.made_group_smaller()
+        if repeat is False:
+            temp = self.made_group_smaller()
+        else:
+            temp = (0, 0)
         self.first_step()
         temp = self.second_step_ver2(temp, my_bag_all)
         temp = self.fourth_step(temp, my_bag_all)
         temp = self.fifth_step(temp, queues)
         return temp
 
-    def search_for_simmilar_ver_3(self, queue):
+    def search_for_simmilar_ver_3(self, repeat, queue):
         """
             # Algorithm III #
         """
-        temp = self.made_group_smaller()
+        if repeat is False:
+            temp = self.made_group_smaller()
+        else:
+            temp = (0, 0)
         self.first_step()
         temp = self.second_step_ver3(temp)
         temp = self.fifth_step(temp, queue)
