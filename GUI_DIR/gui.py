@@ -339,6 +339,8 @@ class App(Frame):  # pylint: disable=too-many-ancestors
         self.listbox.pack(padx=10, pady=10)
         self.progressbar.pack(padx=10, pady=10)
         self.listbox.delete(0, END)
+        App.static_running = 1
+        App.static_job = 0
         self.periodiccall()
 
     def periodiccall(self):
