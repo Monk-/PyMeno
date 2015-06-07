@@ -18716,3 +18716,10 @@ Traceback (most recent call last):
   File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
     raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
 ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 19:22:18,947 - core.check_paths - ERROR - cannot read the file
+2015-06-07 19:22:19,155 - core.check_paths - ERROR - cannot read the file
+2015-06-07 19:22:19,365 - core.check_paths - ERROR - cannot read the file
+2015-06-07 19:22:28,777 - core.check_paths - ERROR - cannot read the file
+2015-06-07 19:22:32,819 - core.check_paths - ERROR - cannot read the file
+2015-06-07 19:22:34,407 - core.check_paths - ERROR - cannot read the file
+2015-06-07 19:22:46,295 - core.check_paths - ERROR - cannot read the file
