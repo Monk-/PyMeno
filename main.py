@@ -15,7 +15,6 @@ class PyMeno(object):
         self.db_parser = CreatingDatabase()
         self.check = MakeBagOfWords()
         self.alg = FindMusic(self.check.my_bag, self.check.my_bag_c)
-
         self.say_credit()
         self.run_app()
 
@@ -33,3 +32,7 @@ class PyMeno(object):
         print("Oleksandr Kuzhel")
 
 PyMeno()
+<<<<<<< HEAD
+=======
+
+>>>>>>> 87eb28aaf0f17de272b1139397361601ff481052
