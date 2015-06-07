@@ -111,7 +111,7 @@ class CreatingDatabase(object):
                         print("Artist : ",
                               current_artist, "\nAll : ",
                               self.dictionary_for_artist[current_artist])
-                except ValueError:
+                except (ValueError, ConnectionError):
                     self.logger.error('Connection problem / no such artist in PyLyrics :: %s',
                                       author.text, exc_info=True)
         self.put_into_pickles(number_of)
