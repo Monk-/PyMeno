@@ -43,7 +43,7 @@ Oleksandr Kuzhel
 	wyszukiwania podobieństw oraz GUI.  
 
 
-# Funkcjonalność :
+        # Funkcjonalność :
 
 	## Nowe źródła porównań
 	
