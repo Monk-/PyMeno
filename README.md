@@ -27,13 +27,14 @@ Oleksandr Kuzhel
 
 # Wymagane dodatkowe biblioteki :
 
-	PyLyrics, nltk, mutagen, Youtube API
+### PyLyrics, nltk, mutagen, Youtube API
 	       -  PyLyrics - Komenda :   pip install PyLyrics 
-	       (W razie problemów : https://pypi.python.org/pypi/PyLyrics/ )
+	       W razie problemów : https://pypi.python.org/pypi/PyLyrics/ 
 	       - nltk - Strona : https://pypi.python.org/pypi/nltk 
 	       - mutagen - Strona : https://pypi.python.org/pypi/mutagen 
 	       - YouTube API - Komenda : pip install --upgrade google-api-python-client 
-	       ( W razie problemów : https://developers.google.com/api-client-library/python/start/installation )
+	       W razie problemów : 
+	       https://developers.google.com/api-client-library/python/start/installation 
 	       
 
 # Opis aplikacji :
@@ -64,25 +65,25 @@ Oleksandr Kuzhel
 	który się wybierze ( dostępne są 3). 
                 1. Przeszukiwanie biblioteki użytkownika i przetwarzanie tekstów
                 2. Zastosowanie algorytmu i wyszukanie podobieństw.
-                    Algorytm I
-                    	Na podstawie wektorów dla każdego artysty w bazie i wektora wszystkich słów
-                    	 w naszej bibliotece wybieramy najbliższe 1 wyniki, po czym porównujemy je ze 
-                    	 względu na średnią ilość słów na utwór. ( Naszym zdaniem istnieje tutaj 
-                    	 zależność względem tempa utworu, im więcej, tym dynamiczniejsza ). Po czym 
-                    	 wyszukuje się ponownie za pomocą miary podobieństw wektorów, tylko na 
-                    	 bazie artysta, album ,z zachowaniem najlepszych wyników z poprzedniej 
-                    	 eliminacji.
-                     Algorytm II
-                    	Na podstawie słowników z bibliotek i zbioru słów powstaje przecięcie pomiędzy 
-                    	nimi. Wybieramy te zbiory które są największe, ograniczamy poprzez ilość słów 
-                    	(analogicznie jak w alg I) i na wyniku wykorzystujemy podobieństwo wektorów
-                    	 z wykorzystaniem artysta,album. 
-                     Algorytm III
-                    	Ten algorytm w stosunku poprzednich nie opiera się na wspólnym słowniku dla 
-                    	całej biblioteki użytkownika, tylko za pomocą podobieństwa wektorów wyszukuje 
-                    	najbardziej podobne artysty do każdego znalezionego wykonawcy. Po czym opiera 
-                    	się o kryterium ze średnią słów w utworze o powiększonym lekko zakresie niż 
-                    	średnia wynikająca z obliczeń.
+###                 Algorytm I
+                    	Na podstawie wektorów dla każdego artysty w bazie i wektora wszystkich 
+                    	słów  w naszej bibliotece wybieramy najbliższe 1 wyniki, po czym
+                    	 porównujemy je ze względu na średnią ilość słów na utwór. 
+                    	 ( Naszym zdaniem istnieje tutaj zależność względem tempa utworu,
+                    	 im więcej, tym dynamiczniejsza ). Po czym wyszukuje się ponownie za 
+                    	 pomocą miary podobieństw wektorów, tylko na bazie artysta, album ,
+                    	 z zachowaniem najlepszych wyników z poprzedniej eliminacji.
+###                 Algorytm II
+                    	Na podstawie słowników z bibliotek i zbioru słów powstaje przecięcie 
+                    	pomiędzy nimi. Wybieramy te zbiory które są największe, ograniczamy 
+                    	poprzez ilość słów (analogicznie jak w alg I) i na wyniku wykorzystujemy 
+                    	podobieństwo wektorów z wykorzystaniem artysta,album. 
+###                Algorytm III
+                    	Ten algorytm w stosunku poprzednich nie opiera się na wspólnym 
+                    	słowniku dla całej biblioteki użytkownika, tylko za pomocą podobieństwa 
+                    	wektorów wyszukuje najbardziej podobne artysty do każdego znalezionego 
+                    	wykonawcy. Po czym opiera się o kryterium ze średnią słów w utworze o 
+                    	powiększonym lekko zakresie niż średnia wynikająca z obliczeń.
                 3. Wylosowanie utworu z wybranego autora oraz albumu.
 
 ## Odsyłanie do utworu na serwisie YouTube
