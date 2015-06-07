@@ -1,5 +1,5 @@
 """main class"""
-from tkinter import Tk
+import tkinter as tk
 import logging
 from logging.config import fileConfig
 from gui_dir import GUI
@@ -10,10 +10,9 @@ class PyMeno(object):
     """runs app"""
     def __init__(self):
         """create gui"""
-        self.root = Tk()
+        self.root = tk.Tk()
         self.root.geometry("800x400+300+300")
         self.db_parser = CreatingDatabase()
-
         self.check = MakeBagOfWords()
         self.alg = FindMusic(self.check.my_bag, self.check.my_bag_c)
         self.say_credit()
@@ -21,7 +20,8 @@ class PyMeno(object):
 
     def run_app(self):
         """run method"""
-        GUI(self.root, self.db_parser, self.check, self.alg)
+        gui = GUI(self.root, self.db_parser, self.check, self.alg)
+        self.root.protocol("WM_DELETE_WINDOW", gui.on_exit)
         self.root.mainloop()
 
     @staticmethod

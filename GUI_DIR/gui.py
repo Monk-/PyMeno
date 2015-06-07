@@ -61,6 +61,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
 
     def on_exit(self):
         """quit"""
+        self.queue.put("endino-tarantino")
         self.quit()
 
     def disable_menu(self):
@@ -347,7 +348,7 @@ class App(Frame):  # pylint: disable=too-many-ancestors
             self._job = None
             self.root.destroy()
             self.root.quit()
-            print("ASas")
+            print("helping window is closing")
 
     def on_closing(self):
         """override what to do on manual close"""
