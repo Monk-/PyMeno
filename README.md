@@ -1,4 +1,4 @@
-# Projekt na kurs "Programowanie w języku Python"
+### Projekt na kurs "Programowanie w języku Python"
 
 # PyMeno
 
