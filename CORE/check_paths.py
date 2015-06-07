@@ -8,6 +8,7 @@ from mutagen.id3 import ID3
 from nltk.corpus import stopwords
 from PyLyrics import PyLyrics
 from nltk.stem.wordnet import WordNetLemmatizer
+import logging
 
 
 class MakeBagOfWords(object):
@@ -19,6 +20,7 @@ class MakeBagOfWords(object):
         """
             init
         """
+        self.logger = logging.getLogger(__name__)
         # Important to not put the same values into users library again
         self.list_artist_songs = []
         # Dict of words per artist
@@ -53,8 +55,9 @@ class MakeBagOfWords(object):
             else:
                 # If was
                 print("That was already parsed", " : \n", label)
-        except ValueError:
-            print("ERROR / Cannot read the file")
+        except (ValueError, UnicodeEncodeError):
+            self.logger.error("cannot read the file")
+            print("cannot read the file")
         return self.list_artist_songs
 
     def bag_of_words(self, artist_name, song_name):

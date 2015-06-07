@@ -8,7 +8,7 @@ import argparse
 from googleapiclient.discovery import build
 import threading
 import queue
-
+import logging
 
 class GUI(Frame):  # pylint: disable=too-many-ancestors
     """class for GUI"""
@@ -20,6 +20,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         self.left_list = Listbox(parent)
         self.left_list.bind("<Double-Button-1>", self.on_double_click)
         self.parent = parent
+        self.logger = logging.getLogger(__name__)
         self.db_creator = db
         self.path_and_bag = pab
         self.alg_do = alg
@@ -211,9 +212,15 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
 
     def go_to_lilis_parsing(self):
         """how many artist do you want to parse"""
-        number = int(simpledialog.askstring('Number', 'How many artists?'))
-        print(number)
-        self.db_creator.parse_file_lil_version(number)
+        number_from = simpledialog.askstring('Number', 'How many artists?/FROM')
+        if number_from is not None:
+            number_from = int(number_from)
+            print(number_from)
+            number_to = int(simpledialog.askstring('Number', 'How many artists?/TO'))
+            if number_to is not None:
+                number_to = int(number_to)
+                print(number_to)
+                self.db_creator.parse_file(number_to, number_from)
 
     def on_double_click(self, event):
         """open youtube on double click"""
@@ -224,8 +231,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         url = self.youtube_search(value)
         webbrowser.open(url, new=new)
 
-    @staticmethod
-    def youtube_search(to_search):
+    def youtube_search(self, to_search):
         """
             This function finds url to our songs throw Youtube API
         """
@@ -265,6 +271,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         try:
             return "https://www.youtube.com/watch?v=" + videos[0]
         except (UnicodeEncodeError, IndexError):
+            self.logger.error('ERROR', exc_info=True)
             return "https://www.youtube.com/watch?v=" + "_NXrTujMP50"
 
 
@@ -273,6 +280,7 @@ class App(Frame):  # pylint: disable=too-many-ancestors
     def __init__(self, master, queue1, number):
         """initialising view"""
         Frame.__init__(self, master)
+        self.logger = logging.getLogger(__name__)
         self.root = master
         self.root.title("Please, bear with me, for a moment : )")
         self.queue = queue1
@@ -319,6 +327,7 @@ class App(Frame):  # pylint: disable=too-many-ancestors
                 if msg == "endino-tarantino":  # crazy name so noone will ever have file like this
                     self.running = 0
             except queue.Empty:
-                # killing thread
+                # killing
+                self.logger.error('Thread ERROR', exc_info=True)
                 self.running = 0
                 self.root.destroy()

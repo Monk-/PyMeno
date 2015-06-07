@@ -18,7 +18,6 @@ class FindMusic(object):
         """
             init
         """
-
         # There we have a dict of average of word per song for each artist
         self.average_word_per_song_artist = {}
         # There we have a dict of average of word per song for all music user's library

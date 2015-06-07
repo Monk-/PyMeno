@@ -9,6 +9,7 @@ import re
 from nltk.corpus import stopwords
 from PyLyrics import PyLyrics
 from nltk.stem.wordnet import WordNetLemmatizer
+import logging
 
 
 class CreatingDatabase(object):
@@ -19,6 +20,7 @@ class CreatingDatabase(object):
         """
             init
         """
+        self.logger = logging.getLogger(__name__)
         self.dictionary_per_album = {}
         self.dictionary_for_artist = {}
         self.list_of_average = {}
@@ -27,8 +29,7 @@ class CreatingDatabase(object):
         self.calc_number_of_songs_per_album = 0
         self.label = ""
 
-    @staticmethod
-    def download_list_of_artists():
+    def download_list_of_artists(self):
         """
             This function is downloading the newest list of songs
             from last.fm throw their API
@@ -36,6 +37,7 @@ class CreatingDatabase(object):
         url = "http://ws.audioscrobbler.com/2.0/" \
             "?method=chart.gettopartists&api_key=d70d8067d56b2afc78942623d4256817&limit=1000"
         request.urlretrieve(url, "data/scrobble.xml")
+        self.logger.debug('downloading scrobble list')
 
     @staticmethod
     def do_the_dicts(artist, name):
@@ -82,6 +84,7 @@ class CreatingDatabase(object):
             self.refresh_dicts()
         counter = 0
         for author in root.findall('.//name'):
+            self.calc_number_of_songs = 0
             if counter < number_from:
                 counter += 1
             else:
@@ -102,13 +105,15 @@ class CreatingDatabase(object):
                                 # going to lyric in song
                                 self.operation_per_song(track, album)
                         except (ValueError, UnboundLocalError):
-                            print("MEGA ERROR / There is no such album in PyLyrics")
+                            self.logger.error('no such album in PyLyrics :: %s', author.text,
+                                              exc_info=True)
                     if current_artist in self.dictionary_for_artist:
                         print("Artist : ",
                               current_artist, "\nAll : ",
                               self.dictionary_for_artist[current_artist])
                 except ValueError:
-                    print("Connection problem / There is no such artist in PyLyrics")
+                    self.logger.error('Connection problem / no such artist in PyLyrics :: %s',
+                                      author.text, exc_info=True)
         self.put_into_pickles(number_of)
 
     def put_into_pickles(self, number_of):
@@ -125,17 +130,15 @@ class CreatingDatabase(object):
             pickle.dump(self.list_of_average_per_artist, file)
         self.check()
 
-    def calculate_average(self, current_artist, album_name,
-                          calc_number_of_songs_per_album, calc_number_of_songs):
+    def calculate_average(self, current_artist):
         """
             This method calculates average
         """
         if self.label in self.dictionary_per_album:
-            print("Per album " + album_name + " : ", self.dictionary_per_album[self.label])
             self.list_of_average[self.label] = \
-                sum(self.dictionary_per_album[self.label].values())/calc_number_of_songs_per_album
+                sum(self.dictionary_per_album[self.label].values())/self.calc_number_of_songs_per_album
             self.list_of_average_per_artist[current_artist] = \
-                sum(self.dictionary_for_artist[current_artist].values())/calc_number_of_songs
+                sum(self.dictionary_for_artist[current_artist].values())/self.calc_number_of_songs
             self.__log_info(self.list_of_average[self.label],
                             self.list_of_average_per_artist[current_artist])
 
@@ -156,13 +159,9 @@ class CreatingDatabase(object):
             self.dict_per_album(song)
             # Counting words per artist
             self.dict_for_artist(current_artist, song)
+            self.calculate_average(current_artist)
         except ValueError:
-            print(" ERROR / There is no such song in PyLyrics")
-
-        self.calculate_average(current_artist,
-                               album.name,
-                               self.calc_number_of_songs_per_album,
-                               self.calc_number_of_songs)
+            self.logger.error('no such song in PyLyrics', exc_info=True)
 
     @staticmethod
     def check():

@@ -1,0 +1,192 @@
+2015-06-07 14:03:06,382 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\02- Time Stands Still (At The Iron Hill) - Live In Wacken 2011.mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:03:07,036 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\03- The Bard's Song (In The Forest) - Live In Wacken 2011.mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:03:07,652 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\CD1 - You Need Me [EP]\01 You Need Me, I Don’t Need You.mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:03:22,675 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\CD4 - Live At The Bedford\24 You Need Me, I Don’t Need You (Live At The Bedford).mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:03:51,723 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\Scorpions - Best Songs\Disc II\13. When The Smoke Going Down.mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:05:27,586 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\02- Time Stands Still (At The Iron Hill) - Live In Wacken 2011.mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = [word for word in song if word not in stopwords.words('english')]
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:05:27,792 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\03- The Bard's Song (In The Forest) - Live In Wacken 2011.mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = [word for word in song if word not in stopwords.words('english')]
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:05:28,122 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\CD1 - You Need Me [EP]\01 You Need Me, I Don’t Need You.mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = [word for word in song if word not in stopwords.words('english')]
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:05:50,205 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\CD4 - Live At The Bedford\24 You Need Me, I Don’t Need You (Live At The Bedford).mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = [word for word in song if word not in stopwords.words('english')]
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:06:06,302 - core.check_paths - ERROR - Cannot read the file :: D:/Christmas/Music\Scorpions - Best Songs\Disc II\13. When The Smoke Going Down.mp3
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 70, in bag_of_words
+    song = [word for word in song if word not in stopwords.words('english')]
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:06:39,163 - core.check_paths - ERROR - Cannot read the file 
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 69, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:06:39,374 - core.check_paths - ERROR - Cannot read the file 
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 69, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:06:39,579 - core.check_paths - ERROR - Cannot read the file 
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 69, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:06:47,150 - core.check_paths - ERROR - Cannot read the file 
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 69, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:06:51,355 - core.check_paths - ERROR - Cannot read the file 
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 69, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:07:03,203 - core.check_paths - ERROR - Cannot read the file 
+Traceback (most recent call last):
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 53, in change_title
+    self.bag_of_words(artist, title)
+  File "C:\Users\Klaudia\Documents\PyMeno\core\check_paths.py", line 69, in bag_of_words
+    song = PyLyrics.getLyrics(artist_name, song_name).lower().split()
+  File "C:\Python34\lib\site-packages\PyLyrics\functions.py", line 79, in getLyrics
+    raise ValueError("Song or Singer does not exist or the API does not have Lyrics")
+ValueError: Song or Singer does not exist or the API does not have Lyrics
+2015-06-07 14:08:11,186 - core.check_paths - ERROR - Cannot read the file D:/Christmas/Music\2014 Twilight Of The Gods (Single)\02- Time Stands Still (At The Iron Hill) - Live In Wacken 2011.mp3
+2015-06-07 14:08:11,388 - core.check_paths - ERROR - Cannot read the file D:/Christmas/Music\2014 Twilight Of The Gods (Single)\03- The Bard's Song (In The Forest) - Live In Wacken 2011.mp3
+2015-06-07 14:08:11,590 - core.check_paths - ERROR - Cannot read the file D:/Christmas/Music\CD1 - You Need Me [EP]\01 You Need Me, I Don’t Need You.mp3
+2015-06-07 14:08:19,104 - core.check_paths - ERROR - Cannot read the file D:/Christmas/Music\CD4 - Live At The Bedford\24 You Need Me, I Don’t Need You (Live At The Bedford).mp3
+2015-06-07 14:08:34,834 - core.check_paths - ERROR - Cannot read the file D:/Christmas/Music\Scorpions - Best Songs\Disc II\13. When The Smoke Going Down.mp3
+2015-06-07 14:12:25,419 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:12:25,625 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:12:25,826 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:12:33,257 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:12:37,333 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:12:39,016 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:12:49,229 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:14:46,004 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:14:46,261 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:14:46,464 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:14:54,140 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:14:58,276 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:14:59,880 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:15:10,312 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:15:33,739 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\02- Time Stands Still (At The Iron Hill) - Live In Wacken 2011.mp3
+2015-06-07 14:15:33,966 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\03- The Bard's Song (In The Forest) - Live In Wacken 2011.mp3
+2015-06-07 14:15:34,192 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\CD1 - You Need Me [EP]\01 You Need Me, I Don’t Need You.mp3
+2015-06-07 14:15:41,985 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\CD4 - Live At The Bedford\24 You Need Me, I Don’t Need You (Live At The Bedford).mp3
+2015-06-07 14:15:58,461 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\Scorpions - Best Songs\Disc II\13. When The Smoke Going Down.mp3
+2015-06-07 14:16:26,732 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\02- Time Stands Still (At The Iron Hill) - Live In Wacken 2011.mp3
+2015-06-07 14:16:26,936 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\03- The Bard's Song (In The Forest) - Live In Wacken 2011.mp3
+2015-06-07 14:16:27,143 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\CD1 - You Need Me [EP]\01 You Need Me, I Don’t Need You.mp3
+2015-06-07 14:16:34,613 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\CD4 - Live At The Bedford\24 You Need Me, I Don’t Need You (Live At The Bedford).mp3
+2015-06-07 14:16:50,441 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\Scorpions - Best Songs\Disc II\13. When The Smoke Going Down.mp3
+2015-06-07 14:17:33,398 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\02- Time Stands Still (At The Iron Hill) - Live In Wacken 2011.mp3
+2015-06-07 14:17:55,624 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\2014 Twilight Of The Gods (Single)\03- The Bard's Song (In The Forest) - Live In Wacken 2011.mp3
+2015-06-07 14:17:55,842 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\CD1 - You Need Me [EP]\01 You Need Me, I Don’t Need You.mp3
+2015-06-07 14:18:03,388 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\CD4 - Live At The Bedford\24 You Need Me, I Don’t Need You (Live At The Bedford).mp3
+2015-06-07 14:18:20,335 - core.check_paths - ERROR - cannot read the file :: D:/Christmas/Music\Scorpions - Best Songs\Disc II\13. When The Smoke Going Down.mp3
+2015-06-07 14:20:01,473 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:20:01,675 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:20:01,889 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:20:09,497 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:20:13,572 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:20:15,179 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:20:25,332 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:21:34,258 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:21:34,461 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:21:34,666 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:21:42,582 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:21:46,712 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:21:48,321 - core.check_paths - ERROR - cannot read the file
+2015-06-07 14:21:58,682 - core.check_paths - ERROR - cannot read the file
