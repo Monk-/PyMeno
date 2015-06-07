@@ -26,7 +26,6 @@ class FindMusic(object):
         self.list_artist_songs = []
         # kind of temporary
         self.catalog = Counter()
-
         self.my_bag = my_bag_a
         self.my_bag_c = my_bag_ca
 
@@ -40,15 +39,18 @@ class FindMusic(object):
         my_bag_all = Counter()
         for value in self.my_bag.values():
             my_bag_all += value
-        if repeat is False:
-            temp = self.made_group_smaller()
+        if my_bag_all:
+            if repeat is False:
+                temp = self.made_group_smaller()
+            else:
+                temp = (0, 0)
+            self.first_step()
+            temp = self.second_step_ver1(temp, my_bag_all)
+            temp = self.fourth_step(temp, my_bag_all)
+            temp = self.fifth_step(temp, queue)
+            return temp
         else:
-            temp = (0, 0)
-        self.first_step()
-        temp = self.second_step_ver1(temp, my_bag_all)
-        temp = self.fourth_step(temp, my_bag_all)
-        temp = self.fifth_step(temp, queue)
-        return temp
+            return {}
 
     def search_for_simmilar_ver_1(self, repeat, queues):
         """
@@ -58,28 +60,34 @@ class FindMusic(object):
         my_bag_all = Counter()
         for value in self.my_bag.values():
             my_bag_all += value
-        if repeat is False:
-            temp = self.made_group_smaller()
+        if my_bag_all:
+            if repeat is False:
+                temp = self.made_group_smaller()
+            else:
+                temp = (0, 0)
+            self.first_step()
+            temp = self.second_step_ver2(temp, my_bag_all)
+            temp = self.fourth_step(temp, my_bag_all)
+            temp = self.fifth_step(temp, queues)
+            return temp
         else:
-            temp = (0, 0)
-        self.first_step()
-        temp = self.second_step_ver2(temp, my_bag_all)
-        temp = self.fourth_step(temp, my_bag_all)
-        temp = self.fifth_step(temp, queues)
-        return temp
+            return {}
 
     def search_for_simmilar_ver_3(self, repeat, queue):
         """
             # Algorithm III #
         """
-        if repeat is False:
-            temp = self.made_group_smaller()
+        if self.my_bag:
+            if repeat is False:
+                temp = self.made_group_smaller()
+            else:
+                temp = (0, 0)
+            self.first_step()
+            temp = self.second_step_ver3(temp)
+            temp = self.fifth_step(temp, queue)
+            return temp
         else:
-            temp = (0, 0)
-        self.first_step()
-        temp = self.second_step_ver3(temp)
-        temp = self.fifth_step(temp, queue)
-        return temp
+            return {}
 
     def made_group_smaller(self):
         """

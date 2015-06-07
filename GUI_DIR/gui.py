@@ -107,20 +107,24 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
                 self.queue.put(filename)
-        self.queue.put("\nAnd what we have here?:\n")
-        self.config(cursor="")
-        shared_items_add = self.alg_do.search_for_simmilar_ver_2(False, self.queue)
-        if not shared_items_add:
-            shared_items_add = self.alg_do.search_for_simmilar_ver_2(True, self.queue)
-        self.left_list.delete(0, END)
-        self.right_list.delete(0, END)
-        for song in list_of_songs:
-            temp = song.split(',', 1)
-            self.insert_to_right_list_box(temp[0], temp[1])
-        for key, value in shared_items_add.items():
-            temp = key.split(',', 1)
-            self.queue.put(temp[0] + " : " + value)
-            self.insert_to_left_list_box(temp[0] + " : " + value)
+        if not list_of_songs:
+            print("action aborted")
+        else:
+            self.queue.put("\nAnd what we have here?:\n")
+            self.config(cursor="")
+            shared_items_add = self.alg_do.search_for_simmilar_ver_2(False, self.queue)
+            if not shared_items_add:
+                shared_items_add = self.alg_do.search_for_simmilar_ver_2(True, self.queue)
+            if shared_items_add:
+                self.left_list.delete(0, END)
+                self.right_list.delete(0, END)
+                for song in list_of_songs:
+                    temp = song.split(',', 1)
+                    self.insert_to_right_list_box(temp[0], temp[1])
+                for key, value in shared_items_add.items():
+                    temp = key.split(',', 1)
+                    self.queue.put(temp[0] + " : " + value)
+                    self.insert_to_left_list_box(temp[0] + " : " + value)
         self.queue.put("endino-tarantino")
         self.enable_menu()
 
@@ -164,20 +168,23 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
                 self.queue.put(filename)
-        self.queue.put("\nAnd what we have here?:\n")
-        self.config(cursor="")
-        shared_items_add = self.alg_do.search_for_simmilar_ver_1(False, self.queue)
-        if not shared_items_add:
-            shared_items_add = self.alg_do.search_for_simmilar_ver_1(True, self.queue)
-
-        self.left_list.delete(0, END)
-        self.right_list.delete(0, END)
-        for song in list_of_songs:
-            temp = song.split(',', 1)
-            self.insert_to_right_list_box(temp[0], temp[1])
-        for key, value in shared_items_add.items():
-            temp = key.split(',', 1)
-            self.insert_to_left_list_box(temp[0] + " : " + value)
+        if not list_of_songs:
+            print("action aborted")
+        else:
+            self.queue.put("\nAnd what we have here?:\n")
+            self.config(cursor="")
+            shared_items_add = self.alg_do.search_for_simmilar_ver_1(False, self.queue)
+            if not shared_items_add:
+                shared_items_add = self.alg_do.search_for_simmilar_ver_1(True, self.queue)
+            if shared_items_add:
+                self.left_list.delete(0, END)
+                self.right_list.delete(0, END)
+                for song in list_of_songs:
+                    temp = song.split(',', 1)
+                    self.insert_to_right_list_box(temp[0], temp[1])
+                for key, value in shared_items_add.items():
+                    temp = key.split(',', 1)
+                    self.insert_to_left_list_box(temp[0] + " : " + value)
         self.queue.put("endino-tarantino")
         self.enable_menu()
 
@@ -216,20 +223,24 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
                 self.queue.put(filename)
-        self.queue.put("\nAnd what we have here?:\n")
-        self.config(cursor="")
-        shared_items_add = self.alg_do.search_for_simmilar_ver_3(False, self.queue)
-        if not shared_items_add:
-            shared_items_add = self.alg_do.search_for_simmilar_ver_3(True, self.queue)
-
-        self.left_list.delete(0, END)
-        self.right_list.delete(0, END)
-        for song in list_of_songs:
-            temp = song.split(',', 1)
-            self.insert_to_right_list_box(temp[0], temp[1])
-        for key, value in shared_items_add.items():
-            temp = key.split(',', 1)
-            self.insert_to_left_list_box(temp[0] + " : " + value)
+        print(list_of_songs)
+        if not list_of_songs:
+            print("action aborted")
+        else:
+            self.queue.put("\nAnd what we have here?:\n")
+            self.config(cursor="")
+            shared_items_add = self.alg_do.search_for_simmilar_ver_3(False, self.queue)
+            if not shared_items_add:
+                shared_items_add = self.alg_do.search_for_simmilar_ver_3(True, self.queue)
+            if shared_items_add:
+                self.left_list.delete(0, END)
+                self.right_list.delete(0, END)
+                for song in list_of_songs:
+                    temp = song.split(',', 1)
+                    self.insert_to_right_list_box(temp[0], temp[1])
+                for key, value in shared_items_add.items():
+                    temp = key.split(',', 1)
+                    self.insert_to_left_list_box(temp[0] + " : " + value)
         self.queue.put("endino-tarantino")
         self.enable_menu()
 
