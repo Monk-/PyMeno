@@ -85,6 +85,11 @@ class FindMusic(object):
         maxs = max(self.average_word_per_song_artist.values())
         print("MAX", str(maxs))
         mins = min(self.average_word_per_song_artist.values())
+        if maxs - mins < 30:
+            if mins < 100:
+                maxs += 30
+            else:
+                mins -= 30
         min_max = (mins, maxs)
         print("MIN", str(mins))
         return min_max
