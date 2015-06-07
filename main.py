@@ -1,6 +1,6 @@
 """main class"""
 import tkinter as tk
-from gui_dir import GUI
+from gui_dir.gui import GUI
 from core import MakeBagOfWords, FindMusic, CreatingDatabase
 
 
