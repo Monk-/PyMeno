@@ -10,6 +10,7 @@ import threading
 import queue
 import logging
 
+
 class GUI(Frame):  # pylint: disable=too-many-ancestors
     """class for GUI"""
 
@@ -25,15 +26,15 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         self.path_and_bag = pab
         self.alg_do = alg
         self.queue = queue.Queue()
+        self.menu_bar = Menu(self.parent)
         self.init_ui()
 
     def init_ui(self):
         """getting all things started"""
         self.parent.title("PyMeno")
-        menu_bar = Menu(self.parent)
-        self.parent.config(menu=menu_bar)
-        file_menu = Menu(menu_bar, tearoff=False)
-        menu2_parse = Menu(menu_bar, tearoff=False)
+        self.parent.config(menu=self.menu_bar)
+        file_menu = Menu(self.menu_bar, tearoff=False)
+        menu2_parse = Menu(self.menu_bar, tearoff=False)
         # menu3_parse = Menu(menu_bar, tearoff=False)
         # sub_menu = Menu(file_menu, tearoff=False)
         self.left_list.pack(side=LEFT, fill=BOTH, expand=2)
@@ -55,12 +56,22 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             add_command(label="Parse artists information to database", underline=0,
                         command=self.go_to_lilis_parsing)
 
-        menu_bar.add_cascade(label="File", underline=0, menu=file_menu)
-        menu_bar.add_cascade(label="Data", underline=0, menu=menu2_parse)
+        self.menu_bar.add_cascade(label="File", underline=0, menu=file_menu)
+        self.menu_bar.add_cascade(label="Data", underline=0, menu=menu2_parse)
 
     def on_exit(self):
         """quit"""
         self.quit()
+
+    def disable_menu(self):
+        """disable menu while program is working"""
+        self.menu_bar.entryconfig("File", state="disabled")
+        self.menu_bar.entryconfig("Data", state="disabled")
+
+    def enable_menu(self):
+        """enable menu after work"""
+        self.menu_bar.entryconfig("File", state="normal")
+        self.menu_bar.entryconfig("Data", state="normal")
 
     def new_thread_1(self):
         """thread for the first algorythm"""
@@ -68,6 +79,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                                            title='Please select a directory')
 
         if dir_name != "":
+            self.disable_menu()
             self.path_and_bag.check_if_refresh(dir_name)
             self.config(cursor="wait")
             self.update()
@@ -80,7 +92,9 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             rott = tk.Tk()
             app = App(rott, self.queue, num_files)
             rott.protocol("WM_DELETE_WINDOW", app.on_closing)
-            threading.Thread(target=self.open_menu, args=(dir_name,)).start()
+            thread = threading.Thread(target=self.open_menu, args=(dir_name,))
+            thread.setDaemon(True)
+            thread.start()
             app.mainloop()
         else:
             print("Action aborted")
@@ -106,6 +120,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             self.queue.put(temp[0] + " : " + value)
             self.insert_to_left_list_box(temp[0] + " : " + value)
         self.queue.put("endino-tarantino")
+        self.enable_menu()
 
     def new_thread_2(self):
         """thread for the second algorythm"""
@@ -113,6 +128,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                                            title='Please select a directory')
 
         if dir_name != "":
+            self.disable_menu()
             self.path_and_bag.check_if_refresh(dir_name)
             self.config(cursor="wait")
             self.update()
@@ -125,7 +141,9 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             rott = tk.Tk()
             app = App(rott, self.queue, num_files)
             rott.protocol("WM_DELETE_WINDOW", app.on_closing)
-            threading.Thread(target=self.open_menu_ver_2, args=(dir_name,)).start()
+            thread = threading.Thread(target=self.open_menu_ver_2, args=(dir_name,))
+            thread.setDaemon(True)
+            thread.start()
             app.mainloop()
         else:
             print("Action aborted")
@@ -156,6 +174,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             temp = key.split(',', 1)
             self.insert_to_left_list_box(temp[0] + " : " + value)
         self.queue.put("endino-tarantino")
+        self.enable_menu()
 
     def new_thread_3(self):
         """thread for the third algorythm"""
@@ -163,6 +182,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                                            title='Please select a directory')
 
         if dir_name != "":
+            self.disable_menu()
             self.path_and_bag.check_if_refresh(dir_name)
             self.config(cursor="wait")
             self.update()
@@ -175,7 +195,9 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             rott = tk.Tk()
             app = App(rott, self.queue, num_files)
             rott.protocol("WM_DELETE_WINDOW", app.on_closing)
-            threading.Thread(target=self.open_menu_ver_3, args=(dir_name,)).start()
+            thread = threading.Thread(target=self.open_menu_ver_3, args=(dir_name,))
+            thread.setDaemon(True)
+            thread.start()
             app.mainloop()
         else:
             print("Action aborted")
@@ -201,6 +223,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             temp = key.split(',', 1)
             self.insert_to_left_list_box(temp[0] + " : " + value)
         self.queue.put("endino-tarantino")
+        self.enable_menu()
 
     def insert_to_right_list_box(self, artist, song):
         """insert to right listbox for other methods"""
@@ -215,12 +238,12 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         number_from = simpledialog.askstring('Number', 'How many artists?/FROM')
         if number_from is not None:
             number_from = int(number_from)
-            print(number_from)
-            number_to = int(simpledialog.askstring('Number', 'How many artists?/TO'))
-            if number_to is not None:
-                number_to = int(number_to)
-                print(number_to)
-                self.db_creator.parse_file(number_to, number_from)
+        print(number_from)
+        number_to = int(simpledialog.askstring('Number', 'How many artists?/TO'))
+        if number_to is not None:
+            number_to = int(number_to)
+        print(number_to)
+        self.db_creator.parse_file(number_to, number_from)
 
     def on_double_click(self, event):
         """open youtube on double click"""
@@ -280,11 +303,11 @@ class App(Frame):  # pylint: disable=too-many-ancestors
     def __init__(self, master, queue1, number):
         """initialising view"""
         Frame.__init__(self, master)
-        self.logger = logging.getLogger(__name__)
         self.root = master
         self.root.title("Please, bear with me, for a moment : )")
         self.queue = queue1
         self.number = number
+        self.logger = logging.getLogger(__name__)
         self.listbox = tk.Listbox(self.root, width=50, height=20)
         self.progressbar = ttk.Progressbar(self.root, orient='horizontal',
                                            length=400, mode='determinate')
@@ -327,7 +350,7 @@ class App(Frame):  # pylint: disable=too-many-ancestors
                 if msg == "endino-tarantino":  # crazy name so noone will ever have file like this
                     self.running = 0
             except queue.Empty:
-                # killing
-                self.logger.error('Thread ERROR', exc_info=True)
+                # killing thread
+                self.logger.error('ERROR', exc_info=True)
                 self.running = 0
                 self.root.destroy()
