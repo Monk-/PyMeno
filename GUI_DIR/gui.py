@@ -13,25 +13,25 @@ import logging
 
 class GUI(Frame):  # pylint: disable=too-many-ancestors
     """class for GUI"""
+    static_logger = logging.getLogger(__name__)
+    static_queue = queue.Queue()
 
     def __init__(self, parent, db, pab, alg):
         """init"""
         Frame.__init__(self, parent)
         self.right_list = Listbox(parent)
         self.left_list = Listbox(parent)
-        self.left_list.bind("<Double-Button-1>", self.on_double_click)
         self.parent = parent
-        self.logger = logging.getLogger(__name__)
         self.db_creator = db
         self.path_and_bag = pab
         self.alg_do = alg
-        self.queue = queue.Queue()
         self.menu_bar = Menu(self.parent)
         self.init_ui()
 
     def init_ui(self):
         """getting all things started"""
         self.parent.title("PyMeno")
+        self.left_list.bind("<Double-Button-1>", self.on_double_click)
         self.parent.config(menu=self.menu_bar)
         file_menu = Menu(self.menu_bar, tearoff=False)
         menu2_parse = Menu(self.menu_bar, tearoff=False)
@@ -61,7 +61,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
 
     def on_exit(self):
         """quit"""
-        self.queue.put("endino-tarantino")
+        GUI.static_queue.put("endino-tarantino")
         self.quit()
 
     def disable_menu(self):
@@ -85,13 +85,13 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             self.config(cursor="wait")
             self.update()
             self.clean_queue()
-            self.queue.put("Finding files in chosen folder:\n\n")
+            GUI.static_queue.put("Finding files in chosen folder:\n\n")
             num_files = len([val for sub_list in
                              [[os.path.join(i[0], j)for j in i[2]]
                               for i in os.walk(dir_name)]
                              for val in sub_list])
             rott = tk.Tk()
-            app = App(rott, self.queue, num_files)
+            app = App(rott, GUI.static_queue, num_files)
             rott.protocol("WM_DELETE_WINDOW", app.on_closing)
             thread = threading.Thread(target=self.open_menu, args=(dir_name,))
             thread.setDaemon(True)
@@ -107,15 +107,15 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         for data in os.walk(dir_name):
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
-                self.queue.put(filename)
+                GUI.static_queue.put(filename)
         if not list_of_songs:
             print("action aborted")
         else:
-            self.queue.put("\nAnd what we have here?:\n")
+            GUI.static_queue.put("\nAnd what we have here?:\n")
             self.config(cursor="")
-            shared_items_add = self.alg_do.search_for_simmilar_ver_2(False, self.queue)
+            shared_items_add = self.alg_do.search_for_simmilar_ver_2(False, GUI.static_queue)
             if not shared_items_add:
-                shared_items_add = self.alg_do.search_for_simmilar_ver_2(True, self.queue)
+                shared_items_add = self.alg_do.search_for_simmilar_ver_2(True, GUI.static_queue)
             if shared_items_add:
                 self.left_list.delete(0, END)
                 self.right_list.delete(0, END)
@@ -124,9 +124,9 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                     self.insert_to_right_list_box(temp[0], temp[1])
                 for key, value in shared_items_add.items():
                     temp = key.split(',', 1)
-                    self.queue.put(temp[0] + " : " + value)
+                    GUI.static_queue.put(temp[0] + " : " + value)
                     self.insert_to_left_list_box(temp[0] + " : " + value)
-        self.queue.put("endino-tarantino")
+        GUI.static_queue.put("endino-tarantino")
         self.enable_menu()
 
     def new_thread_2(self):
@@ -140,13 +140,13 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             self.config(cursor="wait")
             self.update()
             self.clean_queue()
-            self.queue.put("Finding files in chosen folder:\n\n")
+            GUI.static_queue.put("Finding files in chosen folder:\n\n")
             num_files = len([val for sub_list in
                              [[os.path.join(i[0], j)for j in i[2]]
                               for i in os.walk(dir_name)]
                              for val in sub_list])
             rott = tk.Tk()
-            app = App(rott, self.queue, num_files)
+            app = App(rott, GUI.static_queue, num_files)
             rott.protocol("WM_DELETE_WINDOW", app.on_closing)
             thread = threading.Thread(target=self.open_menu_ver_2, args=(dir_name,))
             thread.setDaemon(True)
@@ -155,11 +155,12 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         else:
             print("Action aborted")
 
-    def clean_queue(self):
+    @staticmethod
+    def clean_queue():
         """cleaning queue if user exit manualy"""
-        if not self.queue.empty():
-            while not self.queue.empty():
-                self.queue.get()
+        if not GUI.static_queue.empty():
+            while not GUI.static_queue.empty():
+                GUI.static_queue.get()
 
     def open_menu_ver_2(self, dir_name):
         """select directory with music, alg 2"""
@@ -168,15 +169,15 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         for data in os.walk(dir_name):
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
-                self.queue.put(filename)
+                GUI.static_queue.put(filename)
         if not list_of_songs:
             print("action aborted")
         else:
-            self.queue.put("\nAnd what we have here?:\n")
+            GUI.static_queue.put("\nAnd what we have here?:\n")
             self.config(cursor="")
-            shared_items_add = self.alg_do.search_for_simmilar_ver_1(False, self.queue)
+            shared_items_add = self.alg_do.search_for_simmilar_ver_1(False, GUI.static_queue)
             if not shared_items_add:
-                shared_items_add = self.alg_do.search_for_simmilar_ver_1(True, self.queue)
+                shared_items_add = self.alg_do.search_for_simmilar_ver_1(True, GUI.static_queue)
             if shared_items_add:
                 self.left_list.delete(0, END)
                 self.right_list.delete(0, END)
@@ -186,7 +187,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                 for key, value in shared_items_add.items():
                     temp = key.split(',', 1)
                     self.insert_to_left_list_box(temp[0] + " : " + value)
-        self.queue.put("endino-tarantino")
+        GUI.static_queue.put("endino-tarantino")
         self.enable_menu()
 
     def new_thread_3(self):
@@ -200,13 +201,13 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
             self.config(cursor="wait")
             self.update()
             self.clean_queue()
-            self.queue.put("Finding files in chosen folder:\n\n")
+            GUI.static_queue.put("Finding files in chosen folder:\n\n")
             num_files = len([val for sub_list in
                              [[os.path.join(i[0], j)
                                for j in i[2]] for i in os.walk(dir_name)]
                              for val in sub_list])
             rott = tk.Tk()
-            app = App(rott, self.queue, num_files)
+            app = App(rott, GUI.static_queue, num_files)
             rott.protocol("WM_DELETE_WINDOW", app.on_closing)
             thread = threading.Thread(target=self.open_menu_ver_3, args=(dir_name,))
             thread.setDaemon(True)
@@ -223,16 +224,16 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         for data in os.walk(dir_name):
             for filename in data[2]:
                 list_of_songs = self.path_and_bag.change_title(os.path.join(data[0], filename))
-                self.queue.put(filename)
+                GUI.static_queue.put(filename)
         print(list_of_songs)
         if not list_of_songs:
             print("action aborted")
         else:
-            self.queue.put("\nAnd what we have here?:\n")
+            GUI.static_queue.put("\nAnd what we have here?:\n")
             self.config(cursor="")
-            shared_items_add = self.alg_do.search_for_simmilar_ver_3(False, self.queue)
+            shared_items_add = self.alg_do.search_for_simmilar_ver_3(False, GUI.static_queue)
             if not shared_items_add:
-                shared_items_add = self.alg_do.search_for_simmilar_ver_3(True, self.queue)
+                shared_items_add = self.alg_do.search_for_simmilar_ver_3(True, GUI.static_queue)
             if shared_items_add:
                 self.left_list.delete(0, END)
                 self.right_list.delete(0, END)
@@ -242,7 +243,7 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
                 for key, value in shared_items_add.items():
                     temp = key.split(',', 1)
                     self.insert_to_left_list_box(temp[0] + " : " + value)
-        self.queue.put("endino-tarantino")
+        GUI.static_queue.put("endino-tarantino")
         self.enable_menu()
 
     def insert_to_right_list_box(self, artist, song):
@@ -274,7 +275,8 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         url = self.youtube_search(value)
         webbrowser.open(url, new=new)
 
-    def youtube_search(self, to_search):
+    @staticmethod
+    def youtube_search(to_search):
         """
             This function finds url to our songs throw Youtube API
         """
@@ -314,18 +316,21 @@ class GUI(Frame):  # pylint: disable=too-many-ancestors
         try:
             return "https://www.youtube.com/watch?v=" + videos[0]
         except (UnicodeEncodeError, IndexError):
-            self.logger.error('ERROR', exc_info=True)
+            GUI.static_logger.error('ERROR', exc_info=True)
             return "https://www.youtube.com/watch?v=" + "_NXrTujMP50"
 
 
 class App(Frame):  # pylint: disable=too-many-ancestors
     """information window class"""
+    static_running = 1
+    static_job = 0
+
     def __init__(self, master, queue1, number):
         """initialising view"""
         Frame.__init__(self, master)
         self.root = master
         self.root.title("Please, bear with me, for a moment : )")
-        self.queue = queue1
+        GUI.static_queue = queue1
         self.number = number
         self.logger = logging.getLogger(__name__)
         self.listbox = tk.Listbox(self.root, width=65, height=20)
@@ -334,18 +339,16 @@ class App(Frame):  # pylint: disable=too-many-ancestors
         self.listbox.pack(padx=10, pady=10)
         self.progressbar.pack(padx=10, pady=10)
         self.listbox.delete(0, END)
-        self.running = 1
-        self._job = 0
         self.periodiccall()
 
     def periodiccall(self):
         """function called periodical to get new information"""
         self.check_queue()
-        if self.running:
-            self._job = self.after(100, self.periodiccall)
+        if App.static_running:
+            App.static_job = self.after(100, self.periodiccall)
         else:
-            self.after_cancel(self._job)
-            self._job = None
+            self.after_cancel(App.static_job)
+            App.static_job = None
             self.root.destroy()
             self.root.quit()
             print("helping window is closing")
@@ -356,21 +359,21 @@ class App(Frame):  # pylint: disable=too-many-ancestors
         self.progressbar.destroy()
         self.root.destroy()
         self.root.quit()
-        self.after_cancel(self._job)
-        self._job = None
+        self.after_cancel(App.static_job)
+        App.static_job = None
 
     def check_queue(self):
         """check queue"""
-        while self.queue.qsize():
+        while GUI.static_queue.qsize():
             try:
-                msg = self.queue.get(0)
+                msg = GUI.static_queue.get(0)
                 self.listbox.insert('end', msg)
                 self.listbox.yview(END)
                 self.progressbar.step(100/(self.number + 30))
                 if msg == "endino-tarantino":  # crazy name so noone will ever have file like this
-                    self.running = 0
+                    App.static_running = 0
             except queue.Empty:
                 # killing thread
                 self.logger.error('ERROR', exc_info=True)
-                self.running = 0
+                App.static_running = 0
                 self.root.destroy()
