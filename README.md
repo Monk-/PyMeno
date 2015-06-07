@@ -43,14 +43,14 @@ Oleksandr Kuzhel
 	wyszukiwania podobieństw oraz GUI.  
 
 
-        # Funkcjonalność :
+# Funkcjonalność :
 
-	## Nowe źródła porównań
+## Nowe źródła porównań
 	
 	W aplikacji mamy możliwość uaktualnienia bazy porównań. (Data → Download artists list)  
 	Dzięki temu można uaktualnić swoją listę scrobble.xml, względem toplisty z Last.fm. 
 
-	## Tworzenie  i poszerzanie biblioteki utworów do porównań
+## Tworzenie  i poszerzanie biblioteki utworów do porównań
 
 	Bibliotekę można tworzyć od zera lub kontynuować jej rozbudowywanie. 
 	Poprzez  ( Data → Parse artists information to database ), gdzie podaje się od którego do 
@@ -58,7 +58,7 @@ Oleksandr Kuzhel
 	W wersji użytkowej gromadzenie danych nie powinno być dostępne dla użytkownika,
 	 ale nie mamy dostępu do takiej bazy.
 
-	## Wyszukiwanie podobnych utworów
+## Wyszukiwanie podobnych utworów
 
 	Wyszukiwanie podobnych utworów dzieli się na trzy etapy, niezależnie od algorytmu, 
 	który się wybierze ( dostępne są 3). 
@@ -85,7 +85,7 @@ Oleksandr Kuzhel
                     	średnia wynikająca z obliczeń.
                 3. Wylosowanie utworu z wybranego autora oraz albumu.
 
-	## Odsyłanie do utworu na serwisie YouTube
+## Odsyłanie do utworu na serwisie YouTube
 
 	Po dwukrotnym kliknięciu na zespół : utwór na liście zaproponowanych użytkownikowi 
 	zostanie otworzona nowa zakładka w przeglądarce wraz z utworem, który został mu 
