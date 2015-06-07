@@ -135,17 +135,10 @@ class CreatingDatabase(object):
         """
             This method calculates average
         """
-<<<<<<< HEAD
         if CreatingDatabase.static_label in self.dictionary_per_album:
             self.list_of_average[CreatingDatabase.static_label] = \
                 sum(self.dictionary_per_album[CreatingDatabase.static_label].values()) \
                 / self.calc_number_of_songs_per_album
-=======
-        if self.label in self.dictionary_per_album:
-            self.list_of_average[self.label] = \
-                sum(self.dictionary_per_album[self.label]
-                    .values())/self.calc_number_of_songs_per_album
->>>>>>> 87eb28aaf0f17de272b1139397361601ff481052
             self.list_of_average_per_artist[current_artist] = \
                 sum(self.dictionary_for_artist[current_artist].values()) / self.calc_number_of_songs
             self.__log_info(self.list_of_average[CreatingDatabase.static_label],

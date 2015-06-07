@@ -32,7 +32,4 @@ class PyMeno(object):
         print("Oleksandr Kuzhel")
 
 PyMeno()
-<<<<<<< HEAD
-=======
 
->>>>>>> 87eb28aaf0f17de272b1139397361601ff481052
